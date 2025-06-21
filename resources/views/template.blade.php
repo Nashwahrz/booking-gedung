@@ -19,6 +19,9 @@
             <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
+                        <a class="nav-link" href="{{ url('/') }}">Home</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="{{ route('gedung.index') }}">Data Gedung</a>
                     </li>
                 </ul>

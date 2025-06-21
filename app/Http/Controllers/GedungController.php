@@ -49,16 +49,18 @@ class GedungController extends Controller
         ]);
 
         // Simpan fasilitas
-        $gedung->fasilitas()->create([
-            'proyektor' => $request->has('proyektor'),
-            'meja' => $request->has('meja'),
-            'kursi' => $request->has('kursi'),
-            'wc' => $request->has('wc'),
-            'tempat_ibadah' => $request->has('tempat_ibadah'),
-            'wifi' => $request->has('wifi'),
-            'ac' => $request->has('ac'),
-            'lainnya' => $request->lainnya,
-        ]);
+      // Simpan fasilitas
+$gedung->fasilitas()->create([
+    'proyektor' => $request->proyektor,
+    'meja' => $request->meja,
+    'kursi' => $request->kursi,
+    'wc' => $request->wc,
+    'tempat_ibadah' => $request->tempat_ibadah,
+    'wifi' => $request->wifi,
+    'ac' => $request->ac,
+    'lainnya' => $request->lainnya,
+]);
+
 
         return redirect()->route('gedung.index')->with('success', 'Data gedung berhasil ditambahkan.');
     }
@@ -90,15 +92,17 @@ class GedungController extends Controller
             $foto = $gedung->foto;
         }
 
-        $gedung->update([
-            'nama' => $request->nama,
-            'lokasi' => $request->lokasi,
-            'deskripsi' => $request->deskripsi,
-            'kapasitas' => $request->kapasitas,
-            'harga_per_hari' => $request->harga_per_hari,
-            'kategori_id' => $request->kategori_id,
-            'foto' => $foto,
-        ]);
+       $gedung->fasilitas()->update([
+    'proyektor' => $request->proyektor,
+    'meja' => $request->meja,
+    'kursi' => $request->kursi,
+    'wc' => $request->wc,
+    'tempat_ibadah' => $request->tempat_ibadah,
+    'wifi' => $request->wifi,
+    'ac' => $request->ac,
+    'lainnya' => $request->lainnya,
+]);
+
 
         $gedung->fasilitas()->update([
             'proyektor' => $request->has('proyektor'),

@@ -53,41 +53,49 @@
             </select>
         </div>
 
-        <div class="mb-3">
-            <label class="form-label">Fasilitas</label><br>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" name="meja" id="meja">
-                <label class="form-check-label" for="meja">Meja</label>
-            </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" name="kursi" id="kursi">
-                <label class="form-check-label" for="kursi">Kursi</label>
-            </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" name="proyektor" id="proyektor">
-                <label class="form-check-label" for="proyektor">Proyektor</label>
-            </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" name="wc" id="wc">
-                <label class="form-check-label" for="wc">WC</label>
-            </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" name="tempat_ibadah" id="tempat_ibadah">
-                <label class="form-check-label" for="tempat_ibadah">Tempat Ibadah</label>
-            </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" name="wifi" id="wifi">
-                <label class="form-check-label" for="wifi">Wi-Fi</label>
-            </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" name="ac" id="ac">
-                <label class="form-check-label" for="ac">AC</label>
+        <div class="mb-4">
+            <label class="form-label">Fasilitas</label>
+            <div class="row">
+                <div class="col-md-4 mb-2">
+                    <label for="meja" class="form-label">Jumlah Meja</label>
+                    <input type="number" class="form-control" id="meja" name="meja" placeholder="Contoh: 20">
+                </div>
+
+                <div class="col-md-4 mb-2">
+                    <label for="kursi" class="form-label">Jumlah Kursi</label>
+                    <input type="number" class="form-control" id="kursi" name="kursi" placeholder="Contoh: 100">
+                </div>
+
+                <div class="col-md-4 mb-2">
+                    <label for="proyektor" class="form-label">Jumlah Proyektor</label>
+                    <input type="number" class="form-control" id="proyektor" name="proyektor" placeholder="Contoh: 2">
+                </div>
+
+                <div class="col-md-4 mb-2">
+                    <label for="wc" class="form-label">Jumlah WC</label>
+                    <input type="number" class="form-control" id="wc" name="wc" placeholder="Contoh: 4">
+                </div>
+
+                <div class="col-md-4 mb-2">
+                    <label for="tempat_ibadah" class="form-label">Tempat Ibadah</label>
+                    <input type="text" class="form-control" id="tempat_ibadah" name="tempat_ibadah" placeholder="Contoh: Mushola">
+                </div>
+
+                <div class="col-md-4 mb-2">
+                    <label for="wifi" class="form-label">Wi-Fi</label>
+                    <input type="text" class="form-control" id="wifi" name="wifi" placeholder="Contoh: 100Mbps tersedia">
+                </div>
+
+                <div class="col-md-4 mb-2">
+                    <label for="ac" class="form-label">AC</label>
+                    <input type="text" class="form-control" id="ac" name="ac" placeholder="Contoh: 4 unit, Central AC">
+                </div>
             </div>
         </div>
 
         <div class="mb-3">
             <label for="lainnya" class="form-label">Fasilitas Lainnya</label>
-            <input type="text" class="form-control" id="lainnya" name="lainnya" placeholder="Contoh: Sound system, panggung...">
+            <input type="text" class="form-control" id="lainnya" name="lainnya" placeholder="Contoh: Sound system, panggung">
         </div>
 
         <div class="mb-3">

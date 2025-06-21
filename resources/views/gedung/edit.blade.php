@@ -56,42 +56,50 @@
             </select>
         </div>
 
-        <div class="mb-3">
-            <label class="form-label">Fasilitas</label><br>
-            @php $f = $gedung->fasilitas; @endphp
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" name="meja" id="meja" {{ $f->meja ? 'checked' : '' }}>
-                <label class="form-check-label" for="meja">Meja</label>
-            </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" name="kursi" id="kursi" {{ $f->kursi ? 'checked' : '' }}>
-                <label class="form-check-label" for="kursi">Kursi</label>
-            </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" name="proyektor" id="proyektor" {{ $f->proyektor ? 'checked' : '' }}>
-                <label class="form-check-label" for="proyektor">Proyektor</label>
-            </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" name="wc" id="wc" {{ $f->wc ? 'checked' : '' }}>
-                <label class="form-check-label" for="wc">WC</label>
-            </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" name="tempat_ibadah" id="tempat_ibadah" {{ $f->tempat_ibadah ? 'checked' : '' }}>
-                <label class="form-check-label" for="tempat_ibadah">Tempat Ibadah</label>
-            </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" name="wifi" id="wifi" {{ $f->wifi ? 'checked' : '' }}>
-                <label class="form-check-label" for="wifi">Wi-Fi</label>
-            </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" name="ac" id="ac" {{ $f->ac ? 'checked' : '' }}>
-                <label class="form-check-label" for="ac">AC</label>
-            </div>
+        @php $f = $gedung->fasilitas; @endphp
+        <div class="mb-4">
+            <label class="form-label">Fasilitas</label>
+            <div class="row">
+                <div class="col-md-4 mb-2">
+                    <label for="meja" class="form-label">Jumlah Meja</label>
+                    <input type="number" class="form-control" name="meja" id="meja" value="{{ $f->meja }}">
+                </div>
 
-            <div class="mt-2">
-                <label for="lainnya" class="form-label">Fasilitas Lainnya</label>
-                <input type="text" class="form-control" name="lainnya" id="lainnya" value="{{ $f->lainnya }}">
+                <div class="col-md-4 mb-2">
+                    <label for="kursi" class="form-label">Jumlah Kursi</label>
+                    <input type="number" class="form-control" name="kursi" id="kursi" value="{{ $f->kursi }}">
+                </div>
+
+                <div class="col-md-4 mb-2">
+                    <label for="proyektor" class="form-label">Jumlah Proyektor</label>
+                    <input type="number" class="form-control" name="proyektor" id="proyektor" value="{{ $f->proyektor }}">
+                </div>
+
+                <div class="col-md-4 mb-2">
+                    <label for="wc" class="form-label">Jumlah WC</label>
+                    <input type="number" class="form-control" name="wc" id="wc" value="{{ $f->wc }}">
+                </div>
+
+                <div class="col-md-4 mb-2">
+                    <label for="tempat_ibadah" class="form-label">Tempat Ibadah</label>
+                    <input type="text" class="form-control" name="tempat_ibadah" id="tempat_ibadah" value="{{ $f->tempat_ibadah }}">
+                </div>
+
+                <div class="col-md-4 mb-2">
+                    <label for="wifi" class="form-label">Wi-Fi</label>
+                    <input type="text" class="form-control" name="wifi" id="wifi" value="{{ $f->wifi }}">
+                </div>
+
+                <div class="col-md-4 mb-2">
+                    <label for="ac" class="form-label">AC</label>
+                    <input type="text" class="form-control" name="ac" id="ac" value="{{ $f->ac }}">
+                </div>
             </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="lainnya" class="form-label">Fasilitas Lainnya</label>
+            <input type="text" class="form-control" name="lainnya" id="lainnya" value="{{ $f->lainnya }}">
         </div>
 
         <div class="mb-3">

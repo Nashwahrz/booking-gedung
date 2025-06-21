@@ -2,7 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\GedungController;
+
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/gedung/{id}/detail', [HomeController::class, 'show'])->name('gedung.detail');
+
 
 Route::middleware(['auth', \App\Http\Middleware\IsAdmin::class])->group(function () {
     Route::get('/gedung', [GedungController::class, 'index'])->name('gedung.index');
