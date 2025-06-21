@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Pemesanan extends Model
 {
+    protected $table = 'nashwa_pemesanans';
     public function gedung() {
     return $this->belongsTo(Gedung::class);
 }
