@@ -7,6 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 class Gedung extends Model
 {
     protected $table = 'nashwa_gedungs';
+     protected $fillable = [
+        'nama',
+        'lokasi',
+        'deskripsi',
+        'kapasitas',
+        'harga_per_hari',
+        'kategori_id',
+        'foto',
+    ];
     public function kategori()
     {
         return $this->belongsTo(Kategori::class);
