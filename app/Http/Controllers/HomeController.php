@@ -12,10 +12,14 @@ class HomeController extends Controller
         $gedungs = Gedung::with('kategori')->get();
         return view('homepage', compact('gedungs'));
     }
-    public function show($id)
-{
-    $gedung = \App\Models\Gedung::with(['kategori', 'fasilitas'])->findOrFail($id);
-    return view('detail', compact('gedung'));
-}
+    public function detail($id)
+    {
+        $gedung = Gedung::with('kategori', 'fasilitas')->findOrFail($id);
+        $semua_pemesanans = $gedung->pemesanans()->get(['tanggal_mulai', 'tanggal_selesai']);
+
+        return view('detail', compact('gedung', 'semua_pemesanans'));
+    }
+
+
 
 }
