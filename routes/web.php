@@ -29,7 +29,7 @@ Route::middleware(['auth', \App\Http\Middleware\IsAdmin::class])->group(function
 
 });
 
-Route::get('/pemesanan/hasil/{email}', [PemesananController::class, 'hasil'])->name('pemesanan.cekHasil');
+Route::get('/pemesanan/hasil/{email}', [PemesananController::class, 'hasil'])->name('pemesanan.hasil');
 
 
 

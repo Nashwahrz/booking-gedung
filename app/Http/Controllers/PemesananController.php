@@ -100,20 +100,23 @@ public function cetak($id)
 
     return view('pemesanan.bukti', compact('pemesanan'));
 }
-public function hasil($email)
+public function hasil(Request $request)
 {
-   $pemesanans = Pemesanan::with(['gedung', 'pembayaran'])
-        ->where('email', $email)
+    $request->validate([
+        'email' => 'required|email',
+    ]);
+
+    $pemesanans = Pemesanan::with(['gedung', 'pembayaran'])
+        ->where('email', $request->email)
         ->get();
 
     return view('pemesanan.hasil', [
         'pemesanans' => $pemesanans,
-        'email' => $email
+        'email' => $request->email,
     ]);
-
-
+}
 
 }
 
 
-}
+
