@@ -58,7 +58,37 @@ public function accept($id)
     // Kirim email ke pemesan
     Mail::to($pemesanan->email)->send(new PemesananDisetujui($pemesanan));
 
-    return back()->with('success', 'Pemesanan telah disetujui dan email telah dikirim.');
+    return back()->with('success', 'Pemesanan telah disetujui.');
 }
+public function reject($id)
+{
+    $pemesanan = Pemesanan::findOrFail($id);
+    $pemesanan->status = 'ditolak';
+    $pemesanan->save();
+
+    return redirect()->back()->with('success', 'Pemesanan berhasil ditolak.');
+}
+
+public function formCek()
+{
+    return view('pemesanan.cek');
+}
+
+public function cek(Request $request)
+{
+    $request->validate([
+        'email' => 'required|email',
+    ]);
+
+    $data = \App\Models\Pemesanan::with('gedung')
+        ->where('email', $request->email)
+        ->get();
+
+    return view('pemesanan.hasil', [
+        'pemesanans' => $data,
+        'email' => $request->email
+    ]);
+}
+
 
 }

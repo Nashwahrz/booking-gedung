@@ -14,7 +14,8 @@ Route::get('/gedung/{id}/detail', [HomeController::class, 'detail'])->name('gedu
 Route::get('/booking/{gedung}/{tanggal}', [App\Http\Controllers\PemesananController::class, 'form'])->name('booking.form');
 Route::post('/booking', [App\Http\Controllers\PemesananController::class, 'store'])->name('booking.store');
 
-
+Route::get('/cek-pemesanan', [PemesananController::class, 'formCek'])->name('pemesanan.form');
+Route::post('/cek-pemesanan', [PemesananController::class, 'cek'])->name('pemesanan.cek');
 
 Route::middleware(['auth', \App\Http\Middleware\IsAdmin::class])->group(function () {
     // Route lihat daftar pemesanan
@@ -22,6 +23,8 @@ Route::middleware(['auth', \App\Http\Middleware\IsAdmin::class])->group(function
 
     // Route untuk menyetujui
     Route::post('/gedung/pemesanan/{id}/accept', [PemesananController::class, 'accept'])->name('pemesanan.accept');
+    Route::post('/pemesanan/{id}/reject', [PemesananController::class, 'reject'])->name('pemesanan.reject');
+
 });
 
 

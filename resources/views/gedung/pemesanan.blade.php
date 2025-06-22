@@ -35,16 +35,23 @@
                             <span class="badge bg-danger">Ditolak</span>
                         @endif
                     </td>
-                    <td>
-                        @if ($p->status == 'pending')
-                            <form method="POST" action="{{ route('pemesanan.accept', $p->id) }}">
-                                @csrf
-                                <button class="btn btn-success btn-sm" onclick="return confirm('Yakin setujui pemesanan ini?')">Accept</button>
-                            </form>
-                        @else
-                            <em>-</em>
-                        @endif
-                    </td>
+                    <<td>
+    @if ($p->status == 'pending')
+        <div class="d-flex gap-1">
+            <form method="POST" action="{{ route('pemesanan.accept', $p->id) }}">
+                @csrf
+                <button class="btn btn-success btn-sm" onclick="return confirm('Yakin setujui pemesanan ini?')">Accept</button>
+            </form>
+            <form method="POST" action="{{ route('pemesanan.reject', $p->id) }}">
+                @csrf
+                <button class="btn btn-danger btn-sm" onclick="return confirm('Yakin tolak pemesanan ini?')">Tolak</button>
+            </form>
+        </div>
+    @else
+        <em>-</em>
+    @endif
+</td>
+
                 </tr>
             @empty
                 <tr>

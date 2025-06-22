@@ -21,7 +21,7 @@
 
         <div class="mb-3">
             <label>Tanggal Mulai</label>
-            <input type="date" name="tanggal_mulai" class="form-control" value="{{ $tanggal }}" readonly>
+            <input type="date" name="tanggal_mulai" class="form-control" value="{{ $tanggal }}">
         </div>
 
         <div class="mb-3">
