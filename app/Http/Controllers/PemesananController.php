@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Gedung;
 use App\Models\Pemesanan;
+
 use Illuminate\Http\Request;
-use App\Mail\PemesananDisetujui;
+
+// use App\Mail\PemesananDisetujui;
 use Illuminate\Support\Facades\Mail;
 
 class PemesananController extends Controller
@@ -16,9 +18,9 @@ class PemesananController extends Controller
         return view('booking.form', compact('gedung'));
     }
 
-   public function store(Request $request)
+public function store(Request $request)
 {
-    $request->validate([
+    $validated = $request->validate([
         'email' => 'required|email',
         'no_hp' => 'required',
         'gedung_id' => 'required|exists:nashwa_gedungs,id',
@@ -26,17 +28,15 @@ class PemesananController extends Controller
         'tanggal_selesai' => 'required|date|after_or_equal:tanggal_mulai',
     ]);
 
-    \App\Models\Pemesanan::create([
-        'email' => $request->email,
-        'no_hp' => $request->no_hp,
-        'gedung_id' => $request->gedung_id,
-        'tanggal_mulai' => $request->tanggal_mulai,
-        'tanggal_selesai' => $request->tanggal_selesai,
+    $pemesanan = Pemesanan::create([
+        ...$validated,
         'status' => 'pending',
     ]);
 
-    return redirect('/')->with('success', 'Booking berhasil dikirim! Tunggu persetujuan admin.');
+    // ⬇️ Redirect ke form pembayaran
+    return redirect()->route('pembayaran.create', $pemesanan->id);
 }
+
 
     public function form($gedungId, $tanggal)
 {
@@ -56,7 +56,7 @@ public function accept($id)
     $pemesanan->save();
 
     // Kirim email ke pemesan
-    Mail::to($pemesanan->email)->send(new PemesananDisetujui($pemesanan));
+    // Mail::to($pemesanan->email)->send(new PemesananDisetujui($pemesanan));
 
     return back()->with('success', 'Pemesanan telah disetujui.');
 }
@@ -88,6 +88,31 @@ public function cek(Request $request)
         'pemesanans' => $data,
         'email' => $request->email
     ]);
+}
+
+public function cetak($id)
+{
+    $pemesanan = Pemesanan::with('gedung', 'pembayaran')->findOrFail($id);
+
+    if ($pemesanan->status !== 'disetujui' || $pemesanan->pembayaran->status_bayar !== 'lunas') {
+        abort(403, 'Pemesanan belum lunas atau belum disetujui');
+    }
+
+    return view('pemesanan.bukti', compact('pemesanan'));
+}
+public function hasil($email)
+{
+   $pemesanans = Pemesanan::with(['gedung', 'pembayaran'])
+        ->where('email', $email)
+        ->get();
+
+    return view('pemesanan.hasil', [
+        'pemesanans' => $pemesanans,
+        'email' => $email
+    ]);
+
+
+
 }
 
 

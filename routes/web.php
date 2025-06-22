@@ -1,10 +1,12 @@
 <?php
 
+use App\Http\Middleware\IsAdmin;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\GedungController;
 use App\Http\Controllers\PemesananController;
+use App\Http\Controllers\PembayaranController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/gedung/{id}/detail', [HomeController::class, 'detail'])->name('gedung.detail');
@@ -27,6 +29,9 @@ Route::middleware(['auth', \App\Http\Middleware\IsAdmin::class])->group(function
 
 });
 
+Route::get('/pemesanan/hasil/{email}', [PemesananController::class, 'hasil'])->name('pemesanan.cekHasil');
+
+
 
 
 
@@ -42,3 +47,24 @@ Route::middleware(['auth', \App\Http\Middleware\IsAdmin::class])->group(function
 Route::get('/login', [AuthController::class, 'formLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'destroy'])->name('logout');
+
+// Tampilkan form pembayaran
+// Route::get('/pembayaran/{pemesanan_id}', [PembayaranController::class, 'form'])->name('pembayaran.form');
+
+// Simpan data pembayaran
+Route::get('/pembayaran/{pemesanan}', [PembayaranController::class, 'create'])->name('pembayaran.create');
+Route::post('/pembayaran', [PembayaranController::class, 'store'])->name('pembayaran.store');
+
+
+// Admin: lihat daftar pembayaran
+Route::get('/admin/pembayaran', [PembayaranController::class, 'index'])->middleware(['auth', IsAdmin::class])->name('pembayaran.index');
+
+// Admin: set lunas
+Route::post('/admin/pembayaran/{id}/verifikasi', [PembayaranController::class, 'verifikasi'])->name('pembayaran.verifikasi');
+Route::get('/pembayaran/pelunasan/{id}', [PembayaranController::class, 'formPelunasan'])->name('pembayaran.formPelunasan');
+
+
+Route::get('/pemesanan/cetak/{id}', [PemesananController::class, 'cetak'])->name('pemesanan.cetak');
+Route::post('/pembayaran/verifikasi/{id}', [PembayaranController::class, 'verifikasi'])->name('pembayaran.verifikasi');
+
+

@@ -23,14 +23,30 @@
                     <td>{{ $p->tanggal_mulai }}</td>
                     <td>{{ $p->tanggal_selesai }}</td>
                     <td>
-                        @if ($p->status === 'pending')
-                            <span class="badge bg-warning text-dark">Menunggu</span>
-                        @elseif ($p->status === 'disetujui')
-                            <span class="badge bg-success">Disetujui</span>
-                        @else
-                            <span class="badge bg-danger">Ditolak</span>
-                        @endif
-                    </td>
+    @if ($p->status === 'pending')
+        <span class="badge bg-warning text-dark">Menunggu</span>
+    @elseif ($p->status === 'disetujui')
+        <span class="badge bg-success">Disetujui</span>
+        {{-- Cek apakah sudah lunas atau belum --}}
+        @php
+            $pembayaran = $p->pembayaran;
+        @endphp
+
+        @if (!$pembayaran || $pembayaran->status_bayar !== 'lunas')
+            <form action="{{ route('pembayaran.formPelunasan', $p->id) }}" method="GET" class="mt-2">
+                <button class="btn btn-sm btn-warning">Bayar Pelunasan</button>
+            </form>
+        @else
+            <form action="{{ route('pemesanan.cetak', $p->id) }}" method="GET" target="_blank" class="mt-2">
+                <button class="btn btn-sm btn-outline-primary">Cetak Bukti</button>
+            </form>
+        @endif
+
+    @else
+        <span class="badge bg-danger">Ditolak</span>
+    @endif
+</td>
+
                 </tr>
                 @endforeach
             </tbody>
