@@ -4,9 +4,27 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\GedungController;
+use App\Http\Controllers\PemesananController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/gedung/{id}/detail', [HomeController::class, 'detail'])->name('gedung.detail');
+
+// Route::get('/gedung/{id}/booking', [PemesananController::class, 'create'])->name('booking.form');
+// Route::post('/gedung/{id}/booking', [PemesananController::class, 'store'])->name('booking.store');
+Route::get('/booking/{gedung}/{tanggal}', [App\Http\Controllers\PemesananController::class, 'form'])->name('booking.form');
+Route::post('/booking', [App\Http\Controllers\PemesananController::class, 'store'])->name('booking.store');
+
+
+
+Route::middleware(['auth', \App\Http\Middleware\IsAdmin::class])->group(function () {
+    // Route lihat daftar pemesanan
+    Route::get('/gedung/pemesanan', [PemesananController::class, 'index'])->name('pemesanan.index');
+
+    // Route untuk menyetujui
+    Route::post('/gedung/pemesanan/{id}/accept', [PemesananController::class, 'accept'])->name('pemesanan.accept');
+});
+
+
 
 
 Route::middleware(['auth', \App\Http\Middleware\IsAdmin::class])->group(function () {

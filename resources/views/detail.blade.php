@@ -32,7 +32,10 @@
                 @if ($f->lainnya) <li>Lainnya: {{ $f->lainnya }}</li> @endif
             </ul>
 
-            <a href="#" class="btn btn-success">Booking Sekarang</a>
+           <a href="{{ route('booking.form', ['gedung' => $gedung->id, 'tanggal' => now()->toDateString()]) }}" class="btn btn-success">
+    Booking Sekarang
+</a>
+
             <a href="{{ url('/') }}" class="btn btn-outline-secondary">Kembali</a>
         </div>
     </div>
@@ -74,17 +77,22 @@
     @endphp
 
     <div class="row row-cols-2 row-cols-md-4 g-3 justify-content-center">
-        @for ($i = 1; $i <= $daysInMonth; $i++)
-            @php
-                $tanggal = \Carbon\Carbon::create($tahun, $bulan, $i)->toDateString();
-                $booked = in_array($tanggal, $bookedDates);
-            @endphp
-            <div class="col">
-                <button class="btn w-100 {{ $booked ? 'btn-secondary' : 'btn-success' }}" {{ $booked ? 'disabled' : '' }}>
-                    {{ $i }}
-                </button>
-            </div>
-        @endfor
+       @for ($i = 1; $i <= $daysInMonth; $i++)
+    @php
+        $tanggal = \Carbon\Carbon::create($tahun, $bulan, $i)->toDateString();
+        $booked = in_array($tanggal, $bookedDates);
+    @endphp
+    <div class="col">
+        @if (!$booked)
+            <a href="{{ route('booking.form', ['gedung' => $gedung->id, 'tanggal' => $tanggal]) }}" class="btn btn-success w-100">
+                {{ $i }}
+            </a>
+        @else
+            <button class="btn btn-secondary w-100" disabled>{{ $i }}</button>
+        @endif
+    </div>
+@endfor
+
     </div>
 </div>
 @endsection
