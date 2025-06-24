@@ -3,7 +3,7 @@
 @section('content')
 
 {{-- ====== SECTION 1: INTRO / HEADER (FULL WIDTH BIRU, IKON SAJA) ====== --}}
-<section class="d-flex align-items-center text-white border-bottom" style="background-color: #007bff; min-height: 100vh;">
+<section class="d-flex align-items-center text-white border-bottom" style="background-color: #0f3d6e; min-height: 100vh;">
     <div class="container py-5">
         <div class="row gy-5">
             <div class="col-lg-12 text-center">
@@ -80,7 +80,8 @@
                         </div>
 
                         <div class="card-footer bg-white border-0 d-flex justify-content-between p-3">
-                            <a href="#" class="btn btn-outline-success btn-sm">
+                           <a href="{{ route('booking.form', ['gedung' => $gedung->id, 'tanggal' => now()->toDateString()]) }}"
+                            class="btn btn-success">
                                 <i class="fas fa-calendar-check me-1"></i> Booking
                             </a>
                             <a href="{{ route('gedung.detail', $gedung->id ?? 0) }}" class="btn btn-outline-primary btn-sm">

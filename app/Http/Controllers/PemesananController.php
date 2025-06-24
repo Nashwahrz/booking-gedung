@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Gedung;
+
 use App\Models\Pemesanan;
 
-use Illuminate\Http\Request;
-
 // use App\Mail\PemesananDisetujui;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
 class PemesananController extends Controller
@@ -115,6 +116,29 @@ public function hasil(Request $request)
         'email' => $request->email,
     ]);
 }
+public function show($id)
+{
+    $gedung = Gedung::with('kategori', 'fasilitas')->findOrFail($id);
+
+    $bulan = request('bulan', now()->month);
+    $tahun = request('tahun', now()->year);
+
+    $start = Carbon::create($tahun, $bulan, 1);
+    $end = $start->copy()->endOfMonth();
+
+ $semua_pemesanans = Pemesanan::with('pembayaran')
+    ->where('gedung_id', $id)
+    ->where(function ($q) use ($start, $end) {
+        $q->whereBetween('tanggal_mulai', [$start, $end])
+          ->orWhereBetween('tanggal_selesai', [$start, $end]);
+    })
+    ->get();
+
+
+
+    return view('detail', compact('gedung', 'semua_pemesanans', 'bulan', 'tahun'));
+}
+
 
 }
 

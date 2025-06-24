@@ -105,6 +105,20 @@ public function bayarPelunasan(Request $request, $id)
 
     return redirect()->route('pemesanan.hasil')->with('success', 'Pelunasan berhasil dibayar');
 }
+public function gagal($id)
+{
+    $pembayaran = Pembayaran::findOrFail($id);
+    $pembayaran->status_bayar = 'gagal';
+    $pembayaran->save();
+
+    $pembayaran->pemesanan->status = 'ditolak';
+    $pembayaran->pemesanan->save();
+
+    return back()->with('success', 'Pembayaran ditandai sebagai gagal.');
+}
+
+
+
 
 
 }

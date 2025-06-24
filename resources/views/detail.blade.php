@@ -102,25 +102,43 @@
             </div>
         </form>
 
-        @php
-            $bookedDates = [];
-            foreach ($semua_pemesanans as $p) {
-                $mulai = \Carbon\Carbon::parse($p->tanggal_mulai);
-                $selesai = \Carbon\Carbon::parse($p->tanggal_selesai);
-                while ($mulai <= $selesai) {
-                    $bookedDates[] = $mulai->toDateString();
-                    $mulai->addDay();
-                }
-            }
+   @php
+use Carbon\Carbon;
 
-            $bulan = request('bulan', now()->month);
-            $tahun = request('tahun', now()->year);
-            $daysInMonth = \Carbon\Carbon::create($tahun, $bulan)->daysInMonth;
-        @endphp
+$bookedDates = [];
+
+foreach ($semua_pemesanans as $p) {
+
+
+
+    // Hanya coret kalau status disetujui dan pembayaran lunas
+    if (
+        $p->status === 'disetujui' &&
+        $p->pembayaran &&
+        $p->pembayaran->status_bayar === 'lunas'
+    ) {
+        $mulai = Carbon::parse($p->tanggal_mulai);
+        $selesai = Carbon::parse($p->tanggal_selesai);
+
+        while ($mulai <= $selesai) {
+            $bookedDates[] = $mulai->toDateString();
+            $mulai->addDay();
+        }
+    }
+}
+
+$bulan = request('bulan', now()->month);
+$tahun = request('tahun', now()->year);
+$daysInMonth = Carbon::create($tahun, $bulan)->daysInMonth;
+@endphp
+
+{{-- Untuk debug (bisa diaktifkan kalau perlu) --}}
+{{-- <pre>@foreach($bookedDates as $tgl){{ $tgl }}<br> @endforeach</pre> --}}
+
 <div class="row row-cols-2 row-cols-sm-4 row-cols-md-6 g-2 text-center">
     @for ($i = 1; $i <= $daysInMonth; $i++)
         @php
-            $tanggal = \Carbon\Carbon::create($tahun, $bulan, $i);
+            $tanggal = Carbon::create($tahun, $bulan, $i);
             $tglString = $tanggal->toDateString();
             $booked = in_array($tglString, $bookedDates);
             $isToday = $tanggal->isToday();
@@ -132,7 +150,7 @@
                 </button>
             @elseif ($isToday)
                 <a href="{{ route('booking.form', ['gedung' => $gedung->id, 'tanggal' => $tglString]) }}"
-                    class="btn btn-info text-white w-100 fw-bold">
+                    class="btn btn-info text-white w-100 fw-bold ">
                     {{ $i }}
                 </a>
             @else
@@ -145,5 +163,5 @@
     @endfor
 </div>
 
-    </div>
+
 @endsection

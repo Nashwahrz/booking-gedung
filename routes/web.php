@@ -8,6 +8,8 @@ use App\Http\Controllers\GedungController;
 use App\Http\Controllers\PemesananController;
 use App\Http\Controllers\PembayaranController;
 
+    Route::get('/gedung/{id}', [PemesananController::class, 'show'])->name('gedung.show');
+
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/gedung/{id}/detail', [HomeController::class, 'detail'])->name('gedung.detail');
 
@@ -22,6 +24,8 @@ Route::post('/cek-pemesanan', [PemesananController::class, 'cek'])->name('pemesa
 Route::middleware(['auth', \App\Http\Middleware\IsAdmin::class])->group(function () {
     // Route lihat daftar pemesanan
     Route::get('/gedung/pemesanan', [PemesananController::class, 'index'])->name('pemesanan.index');
+
+
 
     // Route untuk menyetujui
     Route::post('/gedung/pemesanan/{id}/accept', [PemesananController::class, 'accept'])->name('pemesanan.accept');
@@ -66,5 +70,7 @@ Route::get('/pembayaran/pelunasan/{id}', [PembayaranController::class, 'formPelu
 
 Route::get('/pemesanan/cetak/{id}', [PemesananController::class, 'cetak'])->name('pemesanan.cetak');
 Route::post('/pembayaran/verifikasi/{id}', [PembayaranController::class, 'verifikasi'])->name('pembayaran.verifikasi');
+Route::post('/pembayaran/{id}/gagal', [PembayaranController::class, 'gagal'])->name('pembayaran.gagal');
+
 
 

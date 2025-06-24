@@ -11,6 +11,11 @@
     {{-- Font Awesome --}}
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <!-- Tambahkan di <head> -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+
 
 
     {{-- Custom Global Style --}}
@@ -30,7 +35,8 @@
 <body>
 
     {{-- NAVBAR --}}
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm sticky-top">
+    <nav class="navbar navbar-expand-lg navbar-dark shadow-sm sticky-top" style="background-color: #1f6cc3;">
+
         <div class="container">
             <a class="navbar-brand" href="{{ url('/') }}">Booking Gedung</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">

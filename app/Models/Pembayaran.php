@@ -20,10 +20,11 @@ class Pembayaran extends Model
 ];
 
 
-    public function pemesanan()
-    {
-        return $this->belongsTo(Pemesanan::class);
-    }
+   public function pemesanan()
+{
+    return $this->belongsTo(Pemesanan::class, 'pemesanan_id');
+}
+
 }
 
 
