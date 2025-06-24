@@ -42,7 +42,7 @@
                 <div class="receipt-title">Bukti Pemesanan Gedung</div>
                 <small class="text-muted">Sistem Booking Gedung Kampus</small>
             </div>
-            <img src="{{ asset('img/splass.png') }}" alt="Logo" class="receipt-logo">
+            <img src="{{ asset('img/logo.png') }}" alt="Logo" class="receipt-logo">
         </div>
 
         {{-- Isi Data --}}

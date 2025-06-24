@@ -2,8 +2,8 @@
 
 @section('content')
 
-{{-- ====== SECTION 1: INTRO / HEADER (FULL WIDTH BIRU, IKON SAJA) ====== --}}
-<section class="d-flex align-items-center text-white border-bottom" style="background-color: #0f3d6e; min-height: 100vh;">
+{{-- ====== SECTION 1: INTRO / HEADER ====== --}}
+<section class="d-flex align-items-center text-white border-bottom" style="background: linear-gradient(135deg, #2d7a8d, #1e2c3d); min-height: 100vh;">
     <div class="container py-5">
         <div class="row gy-5">
             <div class="col-lg-12 text-center">
@@ -20,30 +20,30 @@
             <div class="col-lg-12">
                 <div class="row text-center g-4 justify-content-center">
                     <div class="col-6 col-md-3">
-                        <div class="bg-white rounded-4 p-4 shadow-sm text-primary h-100">
-                            <i class="fas fa-clock fa-2x mb-3"></i>
-                            <h6 class="fw-bold">Fleksibel</h6>
+                        <div class="bg-white rounded-4 p-4 shadow-sm h-100">
+                            <i class="fas fa-clock fa-2x mb-3 icon-theme"></i>
+                            <h6 class="fw-bold text-theme">Fleksibel</h6>
                             <small class="text-muted">Atur jadwal sesuai kebutuhan</small>
                         </div>
                     </div>
                     <div class="col-6 col-md-3">
-                        <div class="bg-white rounded-4 p-4 shadow-sm text-primary h-100">
-                            <i class="fas fa-tags fa-2x mb-3"></i>
-                            <h6 class="fw-bold">Harga Terjangkau</h6>
+                        <div class="bg-white rounded-4 p-4 shadow-sm h-100">
+                            <i class="fas fa-tags fa-2x mb-3 icon-theme"></i>
+                            <h6 class="fw-bold text-theme">Harga Terjangkau</h6>
                             <small class="text-muted">Mulai dari Rp 100.000</small>
                         </div>
                     </div>
                     <div class="col-6 col-md-3">
-                        <div class="bg-white rounded-4 p-4 shadow-sm text-primary h-100">
-                            <i class="fas fa-map-marker-alt fa-2x mb-3"></i>
-                            <h6 class="fw-bold">Lokasi Strategis</h6>
+                        <div class="bg-white rounded-4 p-4 shadow-sm h-100">
+                            <i class="fas fa-map-marker-alt fa-2x mb-3 icon-theme"></i>
+                            <h6 class="fw-bold text-theme">Lokasi Strategis</h6>
                             <small class="text-muted">Lingkungan kampus utama</small>
                         </div>
                     </div>
                     <div class="col-6 col-md-3">
-                        <div class="bg-white rounded-4 p-4 shadow-sm text-primary h-100">
-                            <i class="fas fa-calendar-check fa-2x mb-3"></i>
-                            <h6 class="fw-bold">Mudah Dipesan</h6>
+                        <div class="bg-white rounded-4 p-4 shadow-sm h-100">
+                            <i class="fas fa-calendar-check fa-2x mb-3 icon-theme"></i>
+                            <h6 class="fw-bold text-theme">Mudah Dipesan</h6>
                             <small class="text-muted">Online & realtime</small>
                         </div>
                     </div>
@@ -53,13 +53,11 @@
     </div>
 </section>
 
-
-
 {{-- ====== SECTION 2: LIST GEDUNG ====== --}}
 <section class="py-5" id="listGedung">
     <div class="container">
         <div class="text-center mb-5">
-            <h2 class="fw-bold text-dark">Daftar Gedung Tersedia</h2>
+            <h2 class="fw-bold text-theme">Daftar Gedung Tersedia</h2>
             <p class="text-muted">Berikut gedung-gedung yang bisa kamu booking sesuai kebutuhan acara.</p>
         </div>
 
@@ -74,17 +72,17 @@
                         @endif
 
                         <div class="card-body">
-                            <h5 class="card-title text-dark fw-semibold">{{ $gedung->nama }}</h5>
+                            <h5 class="card-title text-theme fw-semibold">{{ $gedung->nama }}</h5>
                             <p class="card-text text-muted mb-2">{{ Str::limit($gedung->deskripsi, 100) }}</p>
-                            <p class="mb-0 text-primary fw-bold">Rp{{ number_format($gedung->harga_per_hari, 0, ',', '.') }} / hari</p>
+                            <p class="mb-0 text-theme fw-bold">Rp{{ number_format($gedung->harga_per_hari, 0, ',', '.') }} / hari</p>
                         </div>
 
                         <div class="card-footer bg-white border-0 d-flex justify-content-between p-3">
-                           <a href="{{ route('booking.form', ['gedung' => $gedung->id, 'tanggal' => now()->toDateString()]) }}"
-                            class="btn btn-success">
+                            <a href="{{ route('booking.form', ['gedung' => $gedung->id, 'tanggal' => now()->toDateString()]) }}"
+                               class="btn btn-theme text-white">
                                 <i class="fas fa-calendar-check me-1"></i> Booking
                             </a>
-                            <a href="{{ route('gedung.detail', $gedung->id ?? 0) }}" class="btn btn-outline-primary btn-sm">
+                            <a href="{{ route('gedung.show', $gedung->id ?? 0) }}" class="btn btn-outline-theme btn-sm">
                                 <i class="fas fa-info-circle me-1"></i> Detail
                             </a>
                         </div>
@@ -101,12 +99,44 @@
     </div>
 </section>
 
-{{-- CSS Tambahan --}}
+{{-- ====== CSS TAMBAHAN ====== --}}
 <style>
+    .text-theme {
+        color: #0f3d6e !important;
+    }
+
+    .icon-theme {
+        color: #2b7a78;
+    }
+
+    .btn-theme {
+        background-color: #2b7a78;
+        border: none;
+    }
+
+    .btn-theme:hover {
+        background-color: #246b68;
+        color: #fff;
+    }
+
+    .btn-outline-theme {
+        border: 1px solid #2b7a78;
+        color: #2b7a78;
+    }
+
+    .btn-outline-theme:hover {
+        background-color: #2b7a78;
+        color: white;
+    }
+
     .card:hover {
         transform: translateY(-4px);
         transition: 0.3s ease;
         box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    }
+
+    section {
+        scroll-margin-top: 90px;
     }
 </style>
 @endsection

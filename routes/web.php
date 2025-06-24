@@ -8,7 +8,6 @@ use App\Http\Controllers\GedungController;
 use App\Http\Controllers\PemesananController;
 use App\Http\Controllers\PembayaranController;
 
-    Route::get('/gedung/{id}', [PemesananController::class, 'show'])->name('gedung.show');
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/gedung/{id}/detail', [HomeController::class, 'detail'])->name('gedung.detail');
@@ -33,13 +32,15 @@ Route::middleware(['auth', \App\Http\Middleware\IsAdmin::class])->group(function
 
 });
 
+
+
 Route::get('/pemesanan/hasil/{email}', [PemesananController::class, 'hasil'])->name('pemesanan.hasil');
 
 
 
 
 
-Route::middleware(['auth', \App\Http\Middleware\IsAdmin::class])->group(function () {
+Route::middleware(['auth',IsAdmin::class])->group(function () {
     Route::get('/gedung', [GedungController::class, 'index'])->name('gedung.index');
     Route::get('/gedung/create', [GedungController::class, 'create'])->name('gedung.create');
     Route::post('/gedung', [GedungController::class, 'store'])->name('gedung.store');
@@ -47,7 +48,7 @@ Route::middleware(['auth', \App\Http\Middleware\IsAdmin::class])->group(function
     Route::put('/gedung/{id}', [GedungController::class, 'update'])->name('gedung.update');
     Route::delete('/gedung/{id}', [GedungController::class, 'destroy'])->name('gedung.destroy');
 });
-
+Route::get('/gedung/{id}', [PemesananController::class, 'show'])->name('gedung.show');
 Route::get('/login', [AuthController::class, 'formLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'destroy'])->name('logout');

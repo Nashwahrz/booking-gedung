@@ -72,51 +72,49 @@ $gedung->fasilitas()->create([
         return view('gedung.edit', compact('gedung', 'kategoris'));
     }
 
-    public function update(Request $request, $id)
-    {
-        $gedung = Gedung::findOrFail($id);
+   public function update(Request $request, $id)
+{
+    $gedung = Gedung::findOrFail($id);
 
-        $request->validate([
-            'nama' => 'required',
-            'lokasi' => 'required',
-            'deskripsi' => 'required',
-            'kapasitas' => 'required|integer',
-            'harga_per_hari' => 'required|integer',
-            'kategori_id' => 'required|exists:nashwa_kategoris,id',
-            'foto' => 'nullable|image|max:2048',
-        ]);
+    $request->validate([
+        'nama' => 'required',
+        'lokasi' => 'required',
+        'deskripsi' => 'required',
+        'kapasitas' => 'required|integer',
+        'harga_per_hari' => 'required|integer',
+        'kategori_id' => 'required|exists:nashwa_kategoris,id',
+        'foto' => 'nullable|image|max:2048',
+    ]);
 
-        if ($request->hasFile('foto')) {
-            $foto = $request->file('foto')->store('gedung', 'public');
-        } else {
-            $foto = $gedung->foto;
-        }
-
-       $gedung->fasilitas()->update([
-    'proyektor' => $request->proyektor,
-    'meja' => $request->meja,
-    'kursi' => $request->kursi,
-    'wc' => $request->wc,
-    'tempat_ibadah' => $request->tempat_ibadah,
-    'wifi' => $request->wifi,
-    'ac' => $request->ac,
-    'lainnya' => $request->lainnya,
-]);
-
-
-        $gedung->fasilitas()->update([
-            'proyektor' => $request->has('proyektor'),
-            'meja' => $request->has('meja'),
-            'kursi' => $request->has('kursi'),
-            'wc' => $request->has('wc'),
-            'tempat_ibadah' => $request->has('tempat_ibadah'),
-            'wifi' => $request->has('wifi'),
-            'ac' => $request->has('ac'),
-            'lainnya' => $request->lainnya,
-        ]);
-
-        return redirect()->route('gedung.index')->with('success', 'Data gedung berhasil diperbarui.');
+    if ($request->hasFile('foto')) {
+        $foto = $request->file('foto')->store('gedung', 'public');
+    } else {
+        $foto = $gedung->foto;
     }
+
+    $gedung->update([
+        'nama' => $request->nama,
+        'lokasi' => $request->lokasi,
+        'deskripsi' => $request->deskripsi,
+        'kapasitas' => $request->kapasitas,
+        'harga_per_hari' => $request->harga_per_hari,
+        'kategori_id' => $request->kategori_id,
+        'foto' => $foto,
+    ]);
+
+    $gedung->fasilitas()->update([
+        'proyektor' => $request->proyektor,
+        'meja' => $request->meja,
+        'kursi' => $request->kursi,
+        'wc' => $request->wc,
+        'tempat_ibadah' => $request->tempat_ibadah,
+        'wifi' => $request->wifi,
+        'ac' => $request->ac,
+        'lainnya' => $request->lainnya,
+    ]);
+
+    return redirect()->route('gedung.index')->with('success', 'Data gedung berhasil diperbarui.');
+}
 
     public function destroy($id)
     {
