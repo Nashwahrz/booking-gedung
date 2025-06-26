@@ -19,6 +19,23 @@ class HomeController extends Controller
 
         return view('detail', compact('gedung', 'semua_pemesanans'));
     }
+    public function adminDashboard()
+{
+    $totalGedung = \App\Models\Gedung::count();
+     $totalPemesanan = \App\Models\Pemesanan::where('status', 'disetujui')->count();
+    $totalBayar = \App\Models\Pembayaran::sum('jumlah_bayar') + \App\Models\Pembayaran::sum('pelunasan');
+    $menunggu = \App\Models\Pemesanan::where('status', 'pending')->count();
+    $pemesananTerbaru = \App\Models\Pemesanan::latest()->take(5)->get();
+
+    return view('gedung.dashboard', compact(
+        'totalGedung',
+        'totalPemesanan',
+        'totalBayar',
+        'menunggu',
+        'pemesananTerbaru'
+    ));
+}
+
 
 
 

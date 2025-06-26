@@ -74,7 +74,7 @@
                 </ul>
 
                 <div class="d-flex gap-3">
-                    <a href="{{ route('booking.form', ['gedung' => $gedung->id, 'tanggal' => now()->toDateString()]) }}"
+                    <a href="#tgl_booking"
                        class="btn btn-toska px-4 fw-semibold">
                         Booking Sekarang
                     </a>
@@ -85,7 +85,7 @@
     </div>
 
     <hr class="my-5">
-    <h4 class="text-center mb-4">📅 Pilih Tanggal Booking</h4>
+    <h4 class="text-center mb-4" id='tgl_booking'>📅 Pilih Tanggal Booking</h4>
 
     <form method="GET" class="row justify-content-center mb-4">
         <div class="col-auto">

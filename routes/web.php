@@ -47,6 +47,7 @@ Route::middleware(['auth',IsAdmin::class])->group(function () {
     Route::get('/gedung/{id}/edit', [GedungController::class, 'edit'])->name('gedung.edit');
     Route::put('/gedung/{id}', [GedungController::class, 'update'])->name('gedung.update');
     Route::delete('/gedung/{id}', [GedungController::class, 'destroy'])->name('gedung.destroy');
+    Route::get('/admin/dashboard', [HomeController::class, 'adminDashboard'])->name('admin.dashboard');
 });
 Route::get('/gedung/{id}', [PemesananController::class, 'show'])->name('gedung.show');
 Route::get('/login', [AuthController::class, 'formLogin'])->name('login');

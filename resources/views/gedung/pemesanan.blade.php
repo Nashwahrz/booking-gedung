@@ -35,6 +35,7 @@
                 <tr>
                     <th>Gedung</th>
                     <th>Email</th>
+                    <th>Nama Kegiatan</th>
                     <th>Tgl Mulai</th>
                     <th>Tgl Selesai</th>
                     <th>DP Dibayar</th>
@@ -50,6 +51,7 @@
                     <tr>
                         <td>{{ $p->gedung->nama ?? '-' }}</td>
                         <td>{{ $p->email }}</td>
+                        <td>{{ $p->nama_kegiatan }}</td>
                         <td>{{ $p->tanggal_mulai }}</td>
                         <td>{{ $p->tanggal_selesai }}</td>
                         <td class="text-center">
@@ -127,41 +129,50 @@
                                 <em class="text-muted">-</em>
                             @endif
                         </td>
-                        <td class="text-center">
-                            @if ($p->pembayaran)
-                                @switch($p->pembayaran->status_bayar)
-                                    @case('menunggu')
-                                        <form method="POST" action="{{ route('pembayaran.verifikasi', $p->pembayaran->id) }}"
-                                              class="mb-1">
-                                            @csrf
-                                            <button class="btn btn-sm btn-outline-primary w-100"
-                                                    onclick="return confirm('Verifikasi pembayaran ini?')">
-                                                <i class="bi bi-check2-square me-1"></i> Verifikasi
-                                            </button>
-                                        </form>
-                                        <form method="POST" action="{{ route('pembayaran.gagal', $p->pembayaran->id) }}">
-                                            @csrf
-                                            <button class="btn btn-sm btn-outline-danger w-100"
-                                                    onclick="return confirm('Tandai sebagai gagal?')">
-                                                <i class="bi bi-x-octagon me-1"></i> Gagal
-                                            </button>
-                                        </form>
-                                        @break
-                                    @case('lunas')
-                                        <span class="badge bg-success">
-                                            <i class="bi bi-check-circle-fill me-1"></i> Lunas
-                                        </span>
-                                        @break
-                                    @case('gagal')
-                                        <span class="badge bg-danger">
-                                            <i class="bi bi-x-circle-fill me-1"></i> Gagal
-                                        </span>
-                                        @break
-                                @endswitch
-                            @else
-                                <span class="text-muted">-</span>
-                            @endif
-                        </td>
+                       <td class="text-center">
+    @if ($p->pembayaran && $p->status !== 'pending')
+        @switch($p->pembayaran->status_bayar)
+            @case('menunggu')
+                <form method="POST" action="{{ route('pembayaran.verifikasi', $p->pembayaran->id) }}" class="mb-1">
+                    @csrf
+                    <button class="btn btn-sm btn-outline-primary w-100"
+                            onclick="return confirm('Verifikasi pembayaran ini?')">
+                        <i class="bi bi-check2-square me-1"></i> Verifikasi
+                    </button>
+                </form>
+                <form method="POST" action="{{ route('pembayaran.gagal', $p->pembayaran->id) }}">
+                    @csrf
+                    <button class="btn btn-sm btn-outline-danger w-100"
+                            onclick="return confirm('Tandai sebagai gagal?')">
+                        <i class="bi bi-x-octagon me-1"></i> Gagal
+                    </button>
+                </form>
+                @break
+
+            @case('lunas')
+                <span class="badge bg-success">
+                    <i class="bi bi-check-circle-fill me-1"></i> Lunas
+                </span>
+                @break
+
+            @case('gagal')
+                <span class="badge bg-danger">
+                    <i class="bi bi-x-circle-fill me-1"></i> Gagal
+                </span>
+                @break
+        @endswitch
+    @else
+        <span class="text-muted">
+            @if (!$p->pembayaran)
+                -
+            @elseif($p->status === 'pending')
+                Tunggu Aksi Admin
+            @endif
+        </span>
+    @endif
+</td>
+
+
                     </tr>
                 @empty
                     <tr>

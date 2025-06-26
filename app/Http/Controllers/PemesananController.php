@@ -23,6 +23,7 @@ public function store(Request $request)
 {
     $validated = $request->validate([
         'email' => 'required|email',
+        'nama_kegiatan' => 'required',
         'no_hp' => 'required',
         'gedung_id' => 'required|exists:nashwa_gedungs,id',
         'tanggal_mulai' => 'required|date',

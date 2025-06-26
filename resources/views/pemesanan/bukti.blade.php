@@ -17,21 +17,26 @@
         margin-bottom: 30px;
     }
     .receipt-title {
-        font-size: 24px;
+        font-size: 20px;
         font-weight: 700;
         color: #007bff;
     }
     .receipt-logo {
         height: 60px;
     }
-    @media print {
-        body {
-            background: white !important;
-        }
-        .btn {
-            display: none !important;
-        }
+   @media print {
+    body {
+        background: white !important;
     }
+    .btn {
+        display: none !important;
+    }
+    .receipt-wrapper {
+        transform: scale(0.90);
+        transform-origin: top center;
+    }
+}
+
 </style>
 
 <div class="container py-5 d-flex justify-content-center">
@@ -46,7 +51,7 @@
         </div>
 
         {{-- Isi Data --}}
-        <table class="table table-borderless mb-4" style="width: 100%;">
+        <table class="table table-borderless mb-5" style="width: 100%;">
             <tbody>
                 <tr>
                     <th style="width: 35%;">Nama Gedung</th>
@@ -108,20 +113,26 @@
                 <br><br>
                 <p class="fw-semibold">{{ $pemesanan->email }}</p>
             </div>
-            <div class="text-end">
-                <p class="mb-1">Petugas,</p>
-                <br><br>
-                <p class="fw-semibold">Admin Booking</p>
-            </div>
+          <div class="text-end position-relative" style="min-height: 100px;">
+    <p class="mb-1">Petugas,</p>
+    <div class="position-relative d-inline-block mt-4">
+        {{-- Stempel Gambar --}}
+        <img src="{{ asset('img/gedung.png') }}" alt="Stempel"
+             style="position: absolute; top: -50px; left: 50%; transform: translateX(-50%); opacity: 0.2; height: 100px; z-index: 0;">
+        {{-- Nama Admin --}}
+        <p class="fw-semibold position-relative" style="z-index: 1;">Admin Booking</p>
+    </div>
+</div>
+
         </div>
 
         <hr class="my-4">
         <p class="text-muted small text-center">
-            Bukti ini dicetak secara otomatis oleh sistem dan tidak memerlukan tanda tangan basah.<br>
+           Cetakan sistem – tidak memerlukan tanda tangan.<br>
             Terima kasih telah menggunakan layanan Booking Gedung.
         </p>
 
-        <div class="text-center mt-3">
+        <div class="text-center mt-1">
             <a href="{{ url()->previous() }}" class="btn btn-outline-secondary">⬅ Kembali</a>
             <button onclick="window.print()" class="btn btn-primary">🖨 Cetak Bukti</button>
         </div>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,104 +17,105 @@
 
     {{-- Custom Global Style --}}
     <style>
-    body {
-        font-family: 'Segoe UI', sans-serif;
-        background-color: #f4f6f7;
-        margin: 0;
-        padding: 0;
-    }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f6f7;
+            margin: 0;
+            padding: 0;
+        }
 
-    .navbar {
-        background: linear-gradient(135deg, #2d7a8d, #1e2c3d);
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        backdrop-filter: blur(6px);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
+        .navbar {
+            background: linear-gradient(135deg, #2d7a8d, #1e2c3d);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(6px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
 
-    .navbar-brand {
-        font-weight: bold;
-        display: flex;
-        align-items: center;
-        color: white;
-    }
+        .navbar-brand {
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            color: white;
+        }
 
-    .navbar-brand img {
-        height: 40px;
-        margin-right: 12px;
-    }
+        .navbar-brand img {
+            height: 40px;
+            margin-right: 12px;
+        }
 
-    .nav-link {
-        color: white !important;
-        position: relative;
-        padding: 8px 15px;
-        transition: color 0.3s ease;
-    }
+        .nav-link {
+            color: white !important;
+            position: relative;
+            padding: 8px 15px;
+            transition: color 0.3s ease;
+        }
 
-    .nav-link::after {
-        content: '';
-        position: absolute;
-        bottom: 5px;
-        left: 50%;
-        width: 0;
-        height: 2px;
-        background-color: #ccecee;
-        transition: 0.3s;
-        transform: translateX(-50%);
-    }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 5px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background-color: #ccecee;
+            transition: 0.3s;
+            transform: translateX(-50%);
+        }
 
-    .nav-link:hover::after {
-        width: 70%;
-    }
+        .nav-link:hover::after {
+            width: 70%;
+        }
 
-    .nav-link:hover {
-        color: #ccecee !important;
-    }
+        .nav-link:hover {
+            color: #ccecee !important;
+        }
 
-    .btn-light {
-        background-color: #ffffff;
-        color: #2d7a8d;
-        border: none;
-        padding: 6px 15px;
-        border-radius: 6px;
-        transition: all 0.3s ease;
-    }
+        .btn-light {
+            background-color: #ffffff;
+            color: #2d7a8d;
+            border: none;
+            padding: 6px 15px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
 
-    .btn-light:hover {
-        background-color: #2d7a8d;
-        color: #fff;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    }
+        .btn-light:hover {
+            background-color: #2d7a8d;
+            color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
 
-    .btn-outline-light {
-        border-color: white;
-        color: white;
-        border-radius: 6px;
-        padding: 6px 15px;
-    }
+        .btn-outline-light {
+            border-color: white;
+            color: white;
+            border-radius: 6px;
+            padding: 6px 15px;
+        }
 
-    .btn-outline-light:hover {
-        background-color: white;
-        color: #2d7a8d;
-    }
+        .btn-outline-light:hover {
+            background-color: white;
+            color: #2d7a8d;
+        }
 
-    footer {
-        background-color: #1e2c3d;
-        color: #ccc;
-        padding: 10px 0;
-    }
+        footer {
+            background-color: #1e2c3d;
+            color: #ccc;
+            padding: 10px 0;
+        }
 
-    footer span {
-        color: #d9f4f7;
-    }
-</style>
+        footer span {
+            color: #d9f4f7;
+        }
+    </style>
 
 </head>
+
 <body>
 
     {{-- NAVBAR --}}
     <nav class="navbar navbar-expand-lg navbar-dark shadow-sm sticky-top" style="background-color: #1f6cc3;">
         <div class="container">
-            <a class="navbar-brand" href="{{ url('/') }}">
+            <a class="navbar-brand" >
                 <img src="{{ asset('img/logo.png') }}" alt="Logo"> Booking Gedung
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -123,17 +125,45 @@
             <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
                 {{-- Kiri --}}
                 <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url('/') }}">Home</a>
-                    </li>
                     @auth
+                        @if (auth()->user()->role === 'admin')
+                            {{-- Hanya admin yang melihat ini --}}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('admin.dashboard') }}">Dashboard Admin</a>
+                            </li>
+                        @else
+                            {{-- Bukan admin, tampilkan Home --}}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url('/') }}">Home</a>
+                            </li>
+                        @endif
+
+                        {{-- Tampilkan Data Gedung untuk semua user yang login --}}
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('gedung.index') }}">Data Gedung</a>
                         </li>
+
+                        {{-- Tampilkan "Cek Pemesanan" jika bukan admin --}}
+                        @if (auth()->user()->role !== 'admin')
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('pemesanan.form') }}">Cek Pemesanan</a>
+                            </li>
+                        @endif
                     @endauth
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('pemesanan.form') }}">Cek Pemesanan</a>
-                    </li>
+
+                    {{-- Guest (belum login) --}}
+                    @guest
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url('/') }}">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('pemesanan.form') }}">Cek Pemesanan</a>
+                        </li>
+                    @endguest
+                </ul>
+
+
+
                 </ul>
 
                 {{-- Kanan --}}
@@ -145,7 +175,8 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <form action="{{ route('logout') }}" method="POST" onsubmit="return confirm('Yakin mau logout?')" class="d-inline">
+                            <form action="{{ route('logout') }}" method="POST"
+                                onsubmit="return confirm('Yakin mau logout?')" class="d-inline">
                                 @csrf
                                 <button class="btn btn-outline-light px-3 py-1" type="submit">Logout</button>
                             </form>
@@ -169,4 +200,5 @@
     {{-- Bootstrap Bundle JS --}}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

@@ -78,10 +78,14 @@
                         </div>
 
                         <div class="card-footer bg-white border-0 d-flex justify-content-between p-3">
-                            <a href="{{ route('booking.form', ['gedung' => $gedung->id, 'tanggal' => now()->toDateString()]) }}"
-                               class="btn btn-theme text-white">
-                                <i class="fas fa-calendar-check me-1"></i> Booking
-                            </a>
+                            {{-- <a href="{{ route('booking.form', ['gedung' => $gedung->id, 'tanggal' => now()->toDateString()]) }}"
+                               class="btn btn-theme text-white"> --}}
+                              <a href="{{ route('gedung.show', ['id' => $gedung->id]) }}#tgl_booking"
+   class="btn btn-theme text-white">
+   <i class="fas fa-calendar-check me-1"></i> Booking
+</a>
+
+                               
                             <a href="{{ route('gedung.show', $gedung->id ?? 0) }}" class="btn btn-outline-theme btn-sm">
                                 <i class="fas fa-info-circle me-1"></i> Detail
                             </a>

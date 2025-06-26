@@ -11,6 +11,12 @@
             <form action="{{ route('booking.store') }}" method="POST">
                 @csrf
                 <input type="hidden" name="gedung_id" value="{{ $gedung->id }}">
+                 <div class="mb-3">
+                    <label for="nama_kegiatan" class="form-label">
+                        <i class="bi bi-bullseye me-1"></i> Nama Kegiatan
+                    </label>
+                    <input type="text" name="nama_kegiatan" id="nama_kegiatan" class="form-control" placeholder="kuliah umum" required>
+                </div>
 
                 <div class="mb-3">
                     <label for="email" class="form-label">
@@ -18,6 +24,7 @@
                     </label>
                     <input type="email" name="email" id="email" class="form-control" placeholder="contoh@email.com" required>
                 </div>
+
 
                 <div class="mb-3">
                     <label for="no_hp" class="form-label">
