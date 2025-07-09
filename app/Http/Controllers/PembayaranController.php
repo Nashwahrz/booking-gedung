@@ -53,12 +53,21 @@ class PembayaranController extends Controller
         ]);
     }
 
-   $email = Pemesanan::find($request->pemesanan_id)->email;
+    // Ambil email untuk redirect ke halaman cek
+    $email = Pemesanan::find($request->pemesanan_id)->email;
 
-return redirect()->route('pemesanan.cek', ['email' => $email])
-    ->with('success', 'Pembayaran berhasil dikirim!');
-
+    // Cek apakah form berasal dari pelunasan
+    if ($request->redirect_to_pelunasan == '1') {
+    return redirect()->route('pembayaran.formPelunasan', ['id' => $request->pemesanan_id])
+        ->with('success', 'DP berhasil dikirim. Silakan lanjutkan pelunasan.');
 }
+
+
+
+    return redirect()->route('pemesanan.cek', ['email' => $email])
+        ->with('success', 'Pembayaran berhasil dikirim!');
+}
+
 
 
     // Halaman admin: daftar semua pembayaran
@@ -115,6 +124,12 @@ public function gagal($id)
     $pembayaran->pemesanan->save();
 
     return back()->with('success', 'Pembayaran ditandai sebagai gagal.');
+}
+public function formDp($id)
+{
+    $pemesanan = Pemesanan::with('gedung')->findOrFail($id);
+
+    return view('pembayaran.form', compact('pemesanan'));
 }
 
 

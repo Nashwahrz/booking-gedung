@@ -58,6 +58,21 @@
     <div class="container">
         <div class="text-center mb-5">
             <h2 class="fw-bold text-theme">Daftar Gedung Tersedia</h2>
+       <form method="GET" action="{{ url('/') }}" class="mb-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="input-group shadow-sm rounded-pill overflow-hidden">
+                <span class="input-group-text bg-white border-0 ps-4">
+                    <i class="fas fa-search text-muted"></i>
+                </span>
+                <input type="text" name="cari" value="{{ request('cari') }}" class="form-control border-0" placeholder="Cari nama gedung...">
+                <button class="btn btn-theme px-4 text-white" type="submit">Cari</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+
             <p class="text-muted">Berikut gedung-gedung yang bisa kamu booking sesuai kebutuhan acara.</p>
         </div>
 
@@ -85,7 +100,7 @@
    <i class="fas fa-calendar-check me-1"></i> Booking
 </a>
 
-                               
+
                             <a href="{{ route('gedung.show', $gedung->id ?? 0) }}" class="btn btn-outline-theme btn-sm">
                                 <i class="fas fa-info-circle me-1"></i> Detail
                             </a>
@@ -142,5 +157,28 @@
     section {
         scroll-margin-top: 90px;
     }
+    .input-group-text {
+    background-color: white;
+    border: none;
+}
+
+.input-group input:focus {
+    box-shadow: none;
+    outline: none;
+}
+
 </style>
+
+@include('contact')
+
 @endsection
+@if(request('cari'))
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const target = document.getElementById('listGedung');
+        if (target) {
+            target.scrollIntoView({ behavior: 'smooth' });
+        }
+    });
+</script>
+@endif

@@ -21,17 +21,14 @@
         background-color: #1e2a3a;
         color: white;
     }
-    .list-group-item {
-        background-color: #f9f9f9;
-        border: none;
-        padding: 0.7rem 1.2rem;
-        font-size: 0.95rem;
-    }
     .card-custom {
         border: none;
         border-radius: 1rem;
         overflow: hidden;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+    .text-toska {
+        color: #2a8c94;
     }
 </style>
 
@@ -52,30 +49,100 @@
                 <h2 class="fw-bold text-toska">{{ $gedung->nama }}</h2>
                 <p class="text-muted mb-2"><i class="bi bi-geo-alt-fill me-1"></i>{{ $gedung->lokasi }}</p>
                 <p class="mb-3">{{ $gedung->deskripsi }}</p>
-
-                <div class="mb-2"><strong>Kapasitas:</strong> {{ $gedung->kapasitas }} orang</div>
-                <div class="mb-2"><strong>Kategori:</strong> {{ $gedung->kategori->nama_kategori ?? '-' }}</div>
-                <div class="mb-3">
-                    <strong>Harga per Hari:</strong>
-                    <span class="text-success fw-semibold">Rp{{ number_format($gedung->harga_per_hari, 0, ',', '.') }}</span>
+  <div class="row g-3 mb-3">
+                    <div class="col-6">
+                        <div class="bg-white border-start border-4 border-primary rounded-3 px-3 py-2 shadow-sm">
+                            <div class="text-muted small">Kapasitas</div>
+                            <div class="fw-bold">{{ $gedung->kapasitas }} orang</div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="bg-white border-start border-4 border-primary rounded-3 px-3 py-2 shadow-sm">
+                            <div class="text-muted small">Kategori</div>
+                            <div class="fw-bold">{{ $gedung->kategori->nama_kategori ?? '-' }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <div class="bg-light border-start border-5 border-success rounded-3 px-4 py-3">
+                        <h6 class="text-muted mb-1">Harga per Hari</h6>
+                        <h2 class="text-success fw-bold mb-0">
+                            Rp{{ number_format($gedung->harga_per_hari, 0, ',', '.') }}
+                        </h2>
+                    </div>
                 </div>
 
                 <h5 class="mt-4 fw-bold text-toska">Fasilitas</h5>
                 @php $f = $gedung->fasilitas ?? null; @endphp
-                <ul class="list-group list-group-flush mb-3">
-                    @if ($f->meja)<li class="list-group-item">🪑 Meja: {{ $f->meja }} buah</li>@endif
-                    @if ($f->kursi)<li class="list-group-item">💺 Kursi: {{ $f->kursi }} buah</li>@endif
-                    @if ($f->proyektor)<li class="list-group-item">📽️ Proyektor</li>@endif
-                    @if ($f->wc)<li class="list-group-item">🚻 WC</li>@endif
-                    @if ($f->tempat_ibadah)<li class="list-group-item">🕌 Tempat Ibadah: {{ $f->tempat_ibadah }}</li>@endif
-                    @if ($f->wifi)<li class="list-group-item">📶 WiFi: {{ $f->wifi }}</li>@endif
-                    @if ($f->ac)<li class="list-group-item">❄️ AC: {{ $f->ac }}</li>@endif
-                    @if ($f->lainnya)<li class="list-group-item">🔧 Lainnya: {{ $f->lainnya }}</li>@endif
-                </ul>
+                <div class="row g-2 mb-3">
+                    @if ($f->meja)
+                        <div class="col-6">
+                            <div class="bg-white border rounded p-2 shadow-sm d-flex align-items-center gap-2">
+                                <span class="fs-4">🏋</span>
+                                <small>Meja: {{ $f->meja }} buah</small>
+                            </div>
+                        </div>
+                    @endif
+                    @if ($f->kursi)
+                        <div class="col-6">
+                            <div class="bg-white border rounded p-2 shadow-sm d-flex align-items-center gap-2">
+                                <span class="fs-4">💺</span>
+                                <small>Kursi: {{ $f->kursi }} buah</small>
+                            </div>
+                        </div>
+                    @endif
+                    @if ($f->proyektor)
+                        <div class="col-6">
+                            <div class="bg-white border rounded p-2 shadow-sm d-flex align-items-center gap-2">
+                                <span class="fs-4">📟</span>
+                                <small>Proyektor</small>
+                            </div>
+                        </div>
+                    @endif
+                    @if ($f->wc)
+                        <div class="col-6">
+                            <div class="bg-white border rounded p-2 shadow-sm d-flex align-items-center gap-2">
+                                <span class="fs-4">🛫</span>
+                                <small>WC</small>
+                            </div>
+                        </div>
+                    @endif
+                    @if ($f->tempat_ibadah)
+                        <div class="col-6">
+                            <div class="bg-white border rounded p-2 shadow-sm d-flex align-items-center gap-2">
+                                <span class="fs-4">🌎</span>
+                                <small>Tempat Ibadah: {{ $f->tempat_ibadah }}</small>
+                            </div>
+                        </div>
+                    @endif
+                    @if ($f->wifi)
+                        <div class="col-6">
+                            <div class="bg-white border rounded p-2 shadow-sm d-flex align-items-center gap-2">
+                                <span class="fs-4">📶</span>
+                                <small>WiFi: {{ $f->wifi }}</small>
+                            </div>
+                        </div>
+                    @endif
+                    @if ($f->ac)
+                        <div class="col-6">
+                            <div class="bg-white border rounded p-2 shadow-sm d-flex align-items-center gap-2">
+                                <span class="fs-4">❄</span>
+                                <small>AC: {{ $f->ac }}</small>
+                            </div>
+                        </div>
+                    @endif
+                    @if ($f->lainnya)
+                        <div class="col-12">
+                            <div class="bg-white border rounded p-2 shadow-sm d-flex align-items-center gap-2">
+                                <span class="fs-4">🔧</span>
+                                <small>Lainnya: {{ $f->lainnya }}</small>
+                            </div>
+                        </div>
+                    @endif
+                </div>
 
                 <div class="d-flex gap-3">
-                    <a href="#tgl_booking"
-                       class="btn btn-toska px-4 fw-semibold">
+                    <a href="#tgl_booking" class="btn btn-toska px-4 fw-semibold">
                         Booking Sekarang
                     </a>
                     <a href="{{ url('/') }}" class="btn btn-outline-donker px-4">Kembali</a>
@@ -83,9 +150,19 @@
             </div>
         </div>
     </div>
+{{-- @endsection --}}
+
 
     <hr class="my-5">
-    <h4 class="text-center mb-4" id='tgl_booking'>📅 Pilih Tanggal Booking</h4>
+   <h4 class="text-center mb-4" id="tgl_booking">
+  <span class="px-4 py-2 shadow-sm rounded-pill" style="background-color: #e0f7f7; color: #0f5f5f;">
+    <i class="bi bi-calendar-event-fill me-2"></i>
+    Pilih Tanggal Booking
+  </span>
+</h4>
+
+
+
 
     <form method="GET" class="row justify-content-center mb-4">
         <div class="col-auto">

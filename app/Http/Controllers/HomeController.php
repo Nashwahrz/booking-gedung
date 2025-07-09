@@ -7,11 +7,18 @@ use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    public function index()
-    {
-        $gedungs = Gedung::with('kategori')->get();
-        return view('homepage', compact('gedungs'));
+   public function index(Request $request)
+{
+    $query = Gedung::with('kategori');
+
+    if ($request->filled('cari')) {
+        $query->where('nama', 'like', '%' . $request->cari . '%');
     }
+
+    $gedungs = $query->get();
+
+    return view('homepage', compact('gedungs'));
+}
     public function detail($id)
     {
         $gedung = Gedung::with('kategori', 'fasilitas')->findOrFail($id);

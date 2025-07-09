@@ -14,6 +14,19 @@ class GedungController extends Controller
         return view('gedung.index', compact('gedungs'));
     }
 
+//     public function index(Request $request)
+// {
+//     $query = Gedung::with('kategori', 'fasilitas');
+
+//     // Cek apakah ada input pencarian
+//     if ($request->filled('cari')) {
+//         $query->where('nama', 'like', '%' . $request->cari . '%');
+//     }
+
+//     $gedungs = $query->get();
+
+//     return view('gedung.index', compact('gedungs'));
+// }
     public function create()
     {
         $kategoris = Kategori::all();

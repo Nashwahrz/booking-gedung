@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\GedungController;
+use App\Http\Controllers\KontakController;
 use App\Http\Controllers\PemesananController;
 use App\Http\Controllers\PembayaranController;
 
@@ -60,6 +61,8 @@ Route::post('/logout', [AuthController::class, 'destroy'])->name('logout');
 // Simpan data pembayaran
 Route::get('/pembayaran/{pemesanan}', [PembayaranController::class, 'create'])->name('pembayaran.create');
 Route::post('/pembayaran', [PembayaranController::class, 'store'])->name('pembayaran.store');
+Route::get('/pembayaran/dp/{pemesanan}', [PembayaranController::class, 'formDp'])->name('pembayaran.dp.form');
+
 
 
 // Admin: lihat daftar pembayaran
@@ -74,5 +77,5 @@ Route::get('/pemesanan/cetak/{id}', [PemesananController::class, 'cetak'])->name
 Route::post('/pembayaran/verifikasi/{id}', [PembayaranController::class, 'verifikasi'])->name('pembayaran.verifikasi');
 Route::post('/pembayaran/{id}/gagal', [PembayaranController::class, 'gagal'])->name('pembayaran.gagal');
 
-
+Route::post('/kirim-kontak', [KontakController::class, 'kirim'])->name('kirim.kontak');
 

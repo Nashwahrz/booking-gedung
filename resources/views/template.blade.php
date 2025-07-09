@@ -27,7 +27,6 @@
         .navbar {
             background: linear-gradient(135deg, #2d7a8d, #1e2c3d);
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            backdrop-filter: blur(6px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
@@ -47,7 +46,6 @@
             color: white !important;
             position: relative;
             padding: 8px 15px;
-            transition: color 0.3s ease;
         }
 
         .nav-link::after {
@@ -100,12 +98,44 @@
         footer {
             background-color: #1e2c3d;
             color: #ccc;
-            padding: 10px 0;
+            padding: 20px 0;
+            font-size: 14px;
         }
 
-        footer span {
-            color: #d9f4f7;
+        footer a {
+            color: #ccecee;
+            text-decoration: none;
         }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        .social-icons a {
+            margin: 0 8px;
+            color: #ccecee;
+            font-size: 18px;
+        }
+
+        .social-icons a:hover {
+            color: #ffffff;
+        }
+
+        @media (max-width: 576px) {
+    .navbar-brand img {
+        height: 32px;
+    }
+
+    .navbar .nav-link {
+        padding: 6px 10px;
+        font-size: 14px;
+    }
+
+    footer {
+        font-size: 12px;
+    }
+}
+
     </style>
 
 </head>
@@ -113,9 +143,9 @@
 <body>
 
     {{-- NAVBAR --}}
-    <nav class="navbar navbar-expand-lg navbar-dark shadow-sm sticky-top" style="background-color: #1f6cc3;">
+    <nav class="navbar navbar-expand-lg navbar-dark shadow-sm sticky-top">
         <div class="container">
-            <a class="navbar-brand" >
+            <a class="navbar-brand">
                 <img src="{{ asset('img/logo.png') }}" alt="Logo"> Booking Gedung
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -127,23 +157,19 @@
                 <ul class="navbar-nav">
                     @auth
                         @if (auth()->user()->role === 'admin')
-                            {{-- Hanya admin yang melihat ini --}}
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('admin.dashboard') }}">Dashboard Admin</a>
                             </li>
                         @else
-                            {{-- Bukan admin, tampilkan Home --}}
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ url('/') }}">Home</a>
                             </li>
                         @endif
 
-                        {{-- Tampilkan Data Gedung untuk semua user yang login --}}
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('gedung.index') }}">Data Gedung</a>
                         </li>
 
-                        {{-- Tampilkan "Cek Pemesanan" jika bukan admin --}}
                         @if (auth()->user()->role !== 'admin')
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('pemesanan.form') }}">Cek Pemesanan</a>
@@ -151,7 +177,6 @@
                         @endif
                     @endauth
 
-                    {{-- Guest (belum login) --}}
                     @guest
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url('/') }}">Home</a>
@@ -159,11 +184,10 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('pemesanan.form') }}">Cek Pemesanan</a>
                         </li>
+                        <li class="nav-item">
+                           <a href="#contact" class="nav-link">Kontak</a>
+                        </li>
                     @endguest
-                </ul>
-
-
-
                 </ul>
 
                 {{-- Kanan --}}
@@ -175,8 +199,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <form action="{{ route('logout') }}" method="POST"
-                                onsubmit="return confirm('Yakin mau logout?')" class="d-inline">
+                            <form action="{{ route('logout') }}" method="POST" onsubmit="return confirm('Yakin mau logout?')" class="d-inline">
                                 @csrf
                                 <button class="btn btn-outline-light px-3 py-1" type="submit">Logout</button>
                             </form>
@@ -191,9 +214,22 @@
     @yield('content')
 
     {{-- FOOTER --}}
-    <footer class="bg-light text-center mt-5 py-3 shadow-sm">
-        <div class="container">
-            <span class="text-muted">© {{ date('Y') }} Booking Gedung App</span>
+     <footer class="mt-5">
+        <div class="container text-center">
+            <div class="mb-2">
+                <strong>Nashwa Harzathi</strong> &bull; Developer & UI Designer
+            </div>
+            <div class="social-icons">
+                <a href="https://instagram.com/nsshw.z" target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="https://github.com/nashwahrz" target="_blank"><i class="fab fa-github"></i></a>
+               <a href="https://mail.google.com/mail/?view=cm&fs=1&to=nashwaharzathi05@gmail.com" target="_blank">
+    <i class="fas fa-envelope"></i>
+</a>
+
+            </div>
+            <div class="mt-2">
+                &copy; {{ date('Y') }} Booking Gedung App &mdash; All rights reserved.
+            </div>
         </div>
     </footer>
 

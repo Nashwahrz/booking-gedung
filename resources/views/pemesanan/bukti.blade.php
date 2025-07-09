@@ -3,45 +3,77 @@
 @section('content')
 <style>
     .receipt-wrapper {
-        max-width: 800px;
+        max-width: 750px;
         width: 100%;
         background: #fff;
-        padding: 40px;
+        padding: 25px;
         border: 1px solid #ddd;
-        box-shadow: 0 0 10px rgba(0,0,0,0.05);
+        box-shadow: 0 0 5px rgba(0,0,0,0.05);
         font-family: 'Segoe UI', sans-serif;
+        font-size: 12px;
+        line-height: 1.4;
     }
     .receipt-header {
         border-bottom: 2px solid #007bff;
-        padding-bottom: 15px;
-        margin-bottom: 30px;
+        padding-bottom: 12px;
+        margin-bottom: 20px;
     }
     .receipt-title {
-        font-size: 20px;
+        font-size: 16px;
         font-weight: 700;
         color: #007bff;
     }
     .receipt-logo {
+        height: 40px;
+    }
+    .stempel {
+        position: absolute;
+        top: -30px;
+        left: 50%;
+        transform: translateX(-50%);
+        opacity: 0.2;
         height: 60px;
+        z-index: 0;
     }
-   @media print {
-    body {
-        background: white !important;
-    }
-    .btn {
-        display: none !important;
-    }
-    .receipt-wrapper {
-        transform: scale(0.90);
-        transform-origin: top center;
-    }
-}
 
+    @media print {
+        @page {
+            size: A4;
+            margin: 10mm;
+        }
+        body {
+            background: white !important;
+            margin: 0;
+            padding: 0;
+        }
+        .btn, nav, footer {
+            display: none !important;
+        }
+        .receipt-wrapper {
+            transform: scale(0.93);
+            transform-origin: top center;
+            box-shadow: none;
+            border: none;
+            padding: 10mm;
+            font-size: 11px;
+        }
+        .receipt-title {
+            font-size: 14px;
+        }
+        .receipt-logo {
+            height: 35px;
+        }
+        .stempel {
+            height: 50px !important;
+            top: -25px !important;
+            opacity: 0.2 !important;
+        }
+    }
 </style>
 
-<div class="container py-5 d-flex justify-content-center">
+<div class="container py-4 d-flex justify-content-center">
     <div class="receipt-wrapper">
-        {{-- Kop Surat / Header --}}
+        {{-- Header --}}
         <div class="receipt-header d-flex justify-content-between align-items-center">
             <div>
                 <div class="receipt-title">Bukti Pemesanan Gedung</div>
@@ -50,8 +82,8 @@
             <img src="{{ asset('img/logo.png') }}" alt="Logo" class="receipt-logo">
         </div>
 
-        {{-- Isi Data --}}
-        <table class="table table-borderless mb-5" style="width: 100%;">
+        {{-- Data Pemesanan --}}
+        <table class="table table-borderless mb-4" style="width: 100%;">
             <tbody>
                 <tr>
                     <th style="width: 35%;">Nama Gedung</th>
@@ -97,42 +129,39 @@
             </tbody>
         </table>
 
-        {{-- Bukti Bayar Gambar --}}
+        {{-- Bukti Transfer --}}
         @if ($pemesanan->pembayaran->bukti_bayar)
             <p class="fw-semibold">Bukti Transfer:</p>
             <img src="{{ asset('storage/' . $pemesanan->pembayaran->bukti_bayar) }}"
                  alt="Bukti Bayar"
                  class="img-thumbnail mb-4"
-                 style="max-height: 300px;">
+                 style="max-height: 180px;">
         @endif
 
-        {{-- Footer Tanda Tangan --}}
-        <div class="d-flex justify-content-between mt-5">
+        {{-- Tanda Tangan --}}
+        <div class="d-flex justify-content-between mt-4">
             <div>
-                <p class="mb-1">Pihak Pemesan,</p>
-                <br><br>
+                <p class="mb-1">Pihak Pemesan,</p><br><br>
                 <p class="fw-semibold">{{ $pemesanan->email }}</p>
             </div>
-          <div class="text-end position-relative" style="min-height: 100px;">
-    <p class="mb-1">Petugas,</p>
-    <div class="position-relative d-inline-block mt-4">
-        {{-- Stempel Gambar --}}
-        <img src="{{ asset('img/gedung.png') }}" alt="Stempel"
-             style="position: absolute; top: -50px; left: 50%; transform: translateX(-50%); opacity: 0.2; height: 100px; z-index: 0;">
-        {{-- Nama Admin --}}
-        <p class="fw-semibold position-relative" style="z-index: 1;">Admin Booking</p>
-    </div>
-</div>
-
+            <div class="text-end position-relative" style="min-height: 90px;">
+                <p class="mb-1">Petugas,</p>
+                <div class="position-relative d-inline-block mt-4">
+                    {{-- Gambar Stempel --}}
+                    <img src="{{ asset('img/gedung.png') }}" alt="Stempel" class="stempel">
+                    <p class="fw-semibold position-relative" style="z-index: 1;">Admin Booking</p>
+                </div>
+            </div>
         </div>
 
-        <hr class="my-4">
+        <hr class="my-3">
         <p class="text-muted small text-center">
-           Cetakan sistem – tidak memerlukan tanda tangan.<br>
+            Cetakan sistem – tidak memerlukan tanda tangan.<br>
             Terima kasih telah menggunakan layanan Booking Gedung.
         </p>
 
-        <div class="text-center mt-1">
+        {{-- Tombol --}}
+        <div class="text-center mt-2">
             <a href="{{ url()->previous() }}" class="btn btn-outline-secondary">⬅ Kembali</a>
             <button onclick="window.print()" class="btn btn-primary">🖨 Cetak Bukti</button>
         </div>
