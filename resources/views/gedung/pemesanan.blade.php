@@ -27,7 +27,6 @@
             <i class="bi bi-calendar-check me-2" style="color: #076262;"></i> Daftar Pemesanan Gedung
         </h2>
 
-
         @if (session('success'))
             <div class="alert alert-success shadow-sm">{{ session('success') }}</div>
         @endif
@@ -98,13 +97,13 @@
                                         <span class="badge bg-warning text-dark">
                                             <i class="bi bi-hourglass-split me-1"></i> Pending
                                         </span>
-                                    @break
+                                        @break
 
                                     @case('disetujui')
                                         <span class="badge bg-success">
                                             <i class="bi bi-check-circle me-1"></i> Disetujui
                                         </span>
-                                    @break
+                                        @break
 
                                     @default
                                         <span class="badge bg-danger">
@@ -114,22 +113,26 @@
                             </td>
                             <td class="text-center">
                                 @if ($p->status == 'pending')
-                                    <div class="d-flex flex-column gap-1">
-                                        <form method="POST" action="{{ route('pemesanan.accept', $p->id) }}">
-                                            @csrf
-                                            <button class="btn btn-sm btn-toska w-100"
-                                                onclick="return confirm('Setujui pemesanan ini?')">
-                                                <i class="bi bi-check2-circle me-1"></i> Terima
-                                            </button>
-                                        </form>
-                                        <form method="POST" action="{{ route('pemesanan.reject', $p->id) }}">
-                                            @csrf
-                                            <button class="btn btn-sm btn-outline-danger w-100"
-                                                onclick="return confirm('Tolak pemesanan ini?')">
-                                                <i class="bi bi-x-circle me-1"></i> Tolak
-                                            </button>
-                                        </form>
-                                    </div>
+                                    @if (auth()->user()->role === 'superadmin')
+                                        <div class="d-flex flex-column gap-1">
+                                            <form method="POST" action="{{ route('pemesanan.accept', $p->id) }}">
+                                                @csrf
+                                                <button class="btn btn-sm btn-toska w-100"
+                                                    onclick="return confirm('Setujui pemesanan ini?')">
+                                                    <i class="bi bi-check2-circle me-1"></i> Terima
+                                                </button>
+                                            </form>
+                                            <form method="POST" action="{{ route('pemesanan.reject', $p->id) }}">
+                                                @csrf
+                                                <button class="btn btn-sm btn-outline-danger w-100"
+                                                    onclick="return confirm('Tolak pemesanan ini?')">
+                                                    <i class="bi bi-x-circle me-1"></i> Tolak
+                                                </button>
+                                            </form>
+                                        </div>
+                                    @else
+                                        <span class="text-muted fst-italic">Tidak memiliki akses</span>
+                                    @endif
                                 @else
                                     <em class="text-muted">-</em>
                                 @endif
@@ -138,34 +141,38 @@
                                 @if ($p->pembayaran && $p->status !== 'pending')
                                     @switch($p->pembayaran->status_bayar)
                                         @case('menunggu')
-                                            <form method="POST" action="{{ route('pembayaran.verifikasi', $p->pembayaran->id) }}"
-                                                class="mb-1">
-                                                @csrf
-                                                <button class="btn btn-sm btn-outline-primary w-100"
-                                                    onclick="return confirm('Verifikasi pembayaran ini?')">
-                                                    <i class="bi bi-check2-square me-1"></i> Verifikasi
-                                                </button>
-                                            </form>
-                                            <form method="POST" action="{{ route('pembayaran.gagal', $p->pembayaran->id) }}">
-                                                @csrf
-                                                <button class="btn btn-sm btn-outline-danger w-100"
-                                                    onclick="return confirm('Tandai sebagai gagal?')">
-                                                    <i class="bi bi-x-octagon me-1"></i> Gagal
-                                                </button>
-                                            </form>
-                                        @break
+                                            @if (auth()->user()->role === 'superadmin')
+                                                <form method="POST" action="{{ route('pembayaran.verifikasi', $p->pembayaran->id) }}"
+                                                    class="mb-1">
+                                                    @csrf
+                                                    <button class="btn btn-sm btn-outline-primary w-100"
+                                                        onclick="return confirm('Verifikasi pembayaran ini?')">
+                                                        <i class="bi bi-check2-square me-1"></i> Verifikasi
+                                                    </button>
+                                                </form>
+                                                <form method="POST" action="{{ route('pembayaran.gagal', $p->pembayaran->id) }}">
+                                                    @csrf
+                                                    <button class="btn btn-sm btn-outline-danger w-100"
+                                                        onclick="return confirm('Tandai sebagai gagal?')">
+                                                        <i class="bi bi-x-octagon me-1"></i> Gagal
+                                                    </button>
+                                                </form>
+                                            @else
+                                                <span class="text-muted fst-italic">Tidak memiliki akses</span>
+                                            @endif
+                                            @break
 
                                         @case('lunas')
                                             <span class="badge bg-success">
                                                 <i class="bi bi-check-circle-fill me-1"></i> Lunas
                                             </span>
-                                        @break
+                                            @break
 
                                         @case('gagal')
                                             <span class="badge bg-danger">
                                                 <i class="bi bi-x-circle-fill me-1"></i> Gagal
                                             </span>
-                                        @break
+                                            @break
                                     @endswitch
                                 @else
                                     <span class="text-muted">
@@ -177,18 +184,16 @@
                                     </span>
                                 @endif
                             </td>
-
-
                         </tr>
-                        @empty
-                            <tr>
-                                <td colspan="10" class="text-center text-muted py-4">
-                                    Belum ada data pemesanan
-                                </td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
+                    @empty
+                        <tr>
+                            <td colspan="11" class="text-center text-muted py-4">
+                                Belum ada data pemesanan
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
         </div>
-    @endsection
+    </div>
+@endsection

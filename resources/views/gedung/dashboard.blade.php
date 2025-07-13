@@ -180,6 +180,16 @@
                 </div>
             </a>
         </div>
+
+        <div class="col-sm-6 col-lg-4">
+    <a href="{{ route('admin.formTambah') }}" class="text-decoration-none">
+        <div class="quick-action">
+            <i class="bi bi-person-plus-fill"></i>
+            <span>Tambah Admin</span>
+        </div>
+    </a>
+</div>
+
     </div>
 </div>
 @endsection

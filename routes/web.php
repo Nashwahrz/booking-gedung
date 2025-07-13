@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Middleware\IsAdmin;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
@@ -8,40 +7,42 @@ use App\Http\Controllers\GedungController;
 use App\Http\Controllers\KontakController;
 use App\Http\Controllers\PemesananController;
 use App\Http\Controllers\PembayaranController;
+use App\Http\Middleware\CheckRole;
 
-
+// Halaman depan
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/gedung/{id}/detail', [HomeController::class, 'detail'])->name('gedung.detail');
 
-// Route::get('/gedung/{id}/booking', [PemesananController::class, 'create'])->name('booking.form');
-// Route::post('/gedung/{id}/booking', [PemesananController::class, 'store'])->name('booking.store');
-Route::get('/booking/{gedung}/{tanggal}', [App\Http\Controllers\PemesananController::class, 'form'])->name('booking.form');
-Route::post('/booking', [App\Http\Controllers\PemesananController::class, 'store'])->name('booking.store');
 
+
+// Booking
+Route::get('/booking/{gedung}/{tanggal}', [PemesananController::class, 'form'])->name('booking.form');
+Route::post('/booking', [PemesananController::class, 'store'])->name('booking.store');
+
+// Cek Pemesanan
 Route::get('/cek-pemesanan', [PemesananController::class, 'formCek'])->name('pemesanan.form');
 Route::post('/cek-pemesanan', [PemesananController::class, 'cek'])->name('pemesanan.cek');
-
-Route::middleware(['auth', \App\Http\Middleware\IsAdmin::class])->group(function () {
-    // Route lihat daftar pemesanan
-    Route::get('/gedung/pemesanan', [PemesananController::class, 'index'])->name('pemesanan.index');
-
-
-
-    // Route untuk menyetujui
-    Route::post('/gedung/pemesanan/{id}/accept', [PemesananController::class, 'accept'])->name('pemesanan.accept');
-    Route::post('/pemesanan/{id}/reject', [PemesananController::class, 'reject'])->name('pemesanan.reject');
-
-});
-
-
-
 Route::get('/pemesanan/hasil/{email}', [PemesananController::class, 'hasil'])->name('pemesanan.hasil');
+Route::get('/pemesanan/cetak/{id}', [PemesananController::class, 'cetak'])->name('pemesanan.cetak');
 
+// Form & Aksi Pembayaran
+Route::get('/pembayaran/{pemesanan}', [PembayaranController::class, 'create'])->name('pembayaran.create');
+Route::post('/pembayaran', [PembayaranController::class, 'store'])->name('pembayaran.store');
+Route::get('/pembayaran/dp/{pemesanan}', [PembayaranController::class, 'formDp'])->name('pembayaran.dp.form');
+Route::get('/pembayaran/pelunasan/{id}', [PembayaranController::class, 'formPelunasan'])->name('pembayaran.formPelunasan');
+Route::post('/pembayaran/verifikasi/{id}', [PembayaranController::class, 'verifikasi'])->name('pembayaran.verifikasi');
+Route::post('/pembayaran/{id}/gagal', [PembayaranController::class, 'gagal'])->name('pembayaran.gagal');
 
+// Login & Logout
+Route::get('/login', [AuthController::class, 'formLogin'])->name('login');
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/logout', [AuthController::class, 'destroy'])->name('logout');
 
+// Kontak
+Route::post('/kirim-kontak', [KontakController::class, 'kirim'])->name('kirim.kontak');
 
-
-Route::middleware(['auth',IsAdmin::class])->group(function () {
+// Gedung: Khusus admin (CRUD)
+Route::middleware(['auth', CheckRole::class . ':admin,superadmin'])->group(function () {
     Route::get('/gedung', [GedungController::class, 'index'])->name('gedung.index');
     Route::get('/gedung/create', [GedungController::class, 'create'])->name('gedung.create');
     Route::post('/gedung', [GedungController::class, 'store'])->name('gedung.store');
@@ -50,32 +51,32 @@ Route::middleware(['auth',IsAdmin::class])->group(function () {
     Route::delete('/gedung/{id}', [GedungController::class, 'destroy'])->name('gedung.destroy');
     Route::get('/admin/dashboard', [HomeController::class, 'adminDashboard'])->name('admin.dashboard');
 });
+
+// Pemesanan: bisa diakses admin & superadmin
+Route::middleware(['auth', CheckRole::class . ':admin,superadmin'])->group(function () {
+    Route::get('/gedung/pemesanan', [PemesananController::class, 'index'])->name('pemesanan.index');
+});
+
+// Pemesanan: Khusus superadmin (acc & tolak)
+Route::middleware(['auth', CheckRole::class . ':superadmin'])->group(function () {
+    // Route::get('/gedung/pemesanan', [PemesananController::class, 'index'])->name('pemesanan.index');
+    Route::post('/gedung/pemesanan/{id}/accept', [PemesananController::class, 'accept'])->name('pemesanan.accept');
+    Route::post('/pemesanan/{id}/reject', [PemesananController::class, 'reject'])->name('pemesanan.reject');
+});
+
+// Pembayaran: bisa dilihat oleh admin dan superadmin
+Route::middleware(['auth', CheckRole::class . ':admin,superadmin'])->group(function () {
+    Route::get('/admin/pembayaran', [PembayaranController::class, 'index'])->name('pembayaran.index');
+});
+
+// Tampilkan booking per gedung
 Route::get('/gedung/{id}', [PemesananController::class, 'show'])->name('gedung.show');
-Route::get('/login', [AuthController::class, 'formLogin'])->name('login');
-Route::post('/login', [AuthController::class, 'login']);
-Route::post('/logout', [AuthController::class, 'destroy'])->name('logout');
-
-// Tampilkan form pembayaran
-// Route::get('/pembayaran/{pemesanan_id}', [PembayaranController::class, 'form'])->name('pembayaran.form');
-
-// Simpan data pembayaran
-Route::get('/pembayaran/{pemesanan}', [PembayaranController::class, 'create'])->name('pembayaran.create');
-Route::post('/pembayaran', [PembayaranController::class, 'store'])->name('pembayaran.store');
-Route::get('/pembayaran/dp/{pemesanan}', [PembayaranController::class, 'formDp'])->name('pembayaran.dp.form');
 
 
+// Form Tambah Admin & Simpan: Khusus superadmin
+Route::middleware(['auth', CheckRole::class . ':admin'])->group(function () {
+    Route::get('/admin/tambah-admin', [AuthController::class, 'formTambahAdmin'])->name('admin.formTambah');
+    Route::post('/admin/tambah-admin', [AuthController::class, 'simpanAdminBaru'])->name('admin.simpanAdmin');
+});
 
-// Admin: lihat daftar pembayaran
-Route::get('/admin/pembayaran', [PembayaranController::class, 'index'])->middleware(['auth', IsAdmin::class])->name('pembayaran.index');
-
-// Admin: set lunas
-Route::post('/admin/pembayaran/{id}/verifikasi', [PembayaranController::class, 'verifikasi'])->name('pembayaran.verifikasi');
-Route::get('/pembayaran/pelunasan/{id}', [PembayaranController::class, 'formPelunasan'])->name('pembayaran.formPelunasan');
-
-
-Route::get('/pemesanan/cetak/{id}', [PemesananController::class, 'cetak'])->name('pemesanan.cetak');
-Route::post('/pembayaran/verifikasi/{id}', [PembayaranController::class, 'verifikasi'])->name('pembayaran.verifikasi');
-Route::post('/pembayaran/{id}/gagal', [PembayaranController::class, 'gagal'])->name('pembayaran.gagal');
-
-Route::post('/kirim-kontak', [KontakController::class, 'kirim'])->name('kirim.kontak');
 

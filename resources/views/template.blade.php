@@ -156,7 +156,7 @@
                 {{-- Kiri --}}
                 <ul class="navbar-nav">
                     @auth
-                        @if (auth()->user()->role === 'admin')
+                         @if (in_array(auth()->user()->role, ['admin', 'superadmin']))
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('admin.dashboard') }}">Dashboard Admin</a>
                             </li>
@@ -164,16 +164,17 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ url('/') }}">Home</a>
                             </li>
+                             <li class="nav-item">
+                                <a class="nav-link" href="{{ route('pemesanan.form') }}">Cek Pemesanan</a>
+                            </li>
                         @endif
 
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('gedung.index') }}">Data Gedung</a>
                         </li>
 
-                        @if (auth()->user()->role !== 'admin')
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('pemesanan.form') }}">Cek Pemesanan</a>
-                            </li>
+                         @if (in_array(auth()->user()->role, ['admin', 'superadmin']))
+
                         @endif
                     @endauth
 
@@ -192,7 +193,15 @@
 
                 {{-- Kanan --}}
                 @auth
+
+
+
+
                     <ul class="navbar-nav align-items-center">
+                        <li class="nav-item me-2 text-white">
+    <i class="bi bi-person-circle me-1"></i> {{ auth()->user()->name }}
+</li>
+
                         <li class="nav-item me-2">
                             <a class="nav-link btn px-3 py-1" href="{{ route('pemesanan.index') }}">
                                 Kelola Pemesanan
