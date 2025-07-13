@@ -21,30 +21,96 @@ class PemesananController extends Controller
 
 public function store(Request $request)
 {
-    $validated = $request->validate([
+    $request->validate([
         'email' => 'required|email',
-        'nama_kegiatan' => 'required',
-        'no_hp' => 'required',
+        'nama_kegiatan' => 'required|string',
+        'no_hp' => 'required|string',
         'gedung_id' => 'required|exists:nashwa_gedungs,id',
         'tanggal_mulai' => 'required|date',
         'tanggal_selesai' => 'required|date|after_or_equal:tanggal_mulai',
     ]);
 
+    $seharian = $request->has('seharian');
+    $jamMulai = '00:00:00';
+    $jamSelesai = '23:59:59';
+    $durasi = 24;
+
+    if (!$seharian) {
+        $request->validate([
+            'jam_mulai' => 'required',
+            'jam_selesai' => 'required',
+        ]);
+
+        $jamMulai = $request->jam_mulai;
+        $jamSelesai = $request->jam_selesai;
+
+        // ✅ Gabungkan tanggal + jam untuk hitung durasi
+        $mulai = Carbon::parse($request->tanggal_mulai . ' ' . $jamMulai);
+        $selesai = Carbon::parse($request->tanggal_mulai . ' ' . $jamSelesai);
+
+        if (!$selesai->gt($mulai)) {
+            return back()->with('error', 'Jam selesai harus lebih besar dari jam mulai.');
+        }
+
+        $durasi = $mulai->floatDiffInHours($selesai);
+    }
+
+    // Validasi jam bentrok
+    $bentrok = Pemesanan::where('gedung_id', $request->gedung_id)
+        ->where('tanggal_mulai', $request->tanggal_mulai)
+        ->where(function ($q) use ($jamMulai, $jamSelesai) {
+            $q->whereBetween('jam_mulai', [$jamMulai, $jamSelesai])
+              ->orWhereBetween('jam_selesai', [$jamMulai, $jamSelesai])
+              ->orWhere(function ($q2) use ($jamMulai, $jamSelesai) {
+                  $q2->where('jam_mulai', '<=', $jamMulai)
+                     ->where('jam_selesai', '>=', $jamSelesai);
+              });
+        })
+        ->exists();
+
+    if ($bentrok) {
+        return back()->with('error', 'Jam tersebut sudah dibooking orang lain.');
+    }
+
     $pemesanan = Pemesanan::create([
-        ...$validated,
+        'email' => $request->email,
+        'nama_kegiatan' => $request->nama_kegiatan,
+        'no_hp' => $request->no_hp,
+        'gedung_id' => $request->gedung_id,
+        'tanggal_mulai' => $request->tanggal_mulai,
+        'tanggal_selesai' => $request->tanggal_selesai,
+        'jam_mulai' => $jamMulai,
+        'jam_selesai' => $jamSelesai,
+       'durasi' => round($durasi, 2),
         'status' => 'pending',
     ]);
 
-    // ⬇️ Redirect ke form pembayaran
     return redirect()->route('pembayaran.create', $pemesanan->id);
 }
 
 
+
+
     public function form($gedungId, $tanggal)
 {
-    $gedung = \App\Models\Gedung::findOrFail($gedungId);
-    return view('booking.form', compact('gedung', 'tanggal'));
+    $gedung = Gedung::findOrFail($gedungId);
+
+    $bookedTimes = Pemesanan::where('gedung_id', $gedungId)
+        ->where('tanggal_mulai', $tanggal)
+        ->where('status', '!=', 'ditolak') // biar yg ditolak ga ikut
+        ->select('jam_mulai', 'jam_selesai')
+        ->get()
+        ->map(function ($item) {
+            return [
+                'jam_mulai' => substr($item->jam_mulai, 0, 5),
+                'jam_selesai' => substr($item->jam_selesai, 0, 5),
+            ];
+        })
+        ->toArray();
+
+    return view('booking.form', compact('gedung', 'tanggal', 'bookedTimes'));
 }
+
 public function index()
 {
     $pemesanans = Pemesanan::with('gedung')->orderBy('created_at', 'desc')->get();

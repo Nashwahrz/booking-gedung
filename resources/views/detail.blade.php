@@ -44,6 +44,8 @@
             </div>
         </div>
 
+
+        {{-- DETAIL GEDUNG --}}
         <div class="col-md-6">
             <div class="card card-custom p-4">
                 <h2 class="fw-bold text-toska">{{ $gedung->nama }}</h2>
@@ -63,14 +65,21 @@
                         </div>
                     </div>
                 </div>
-                <div class="mb-4">
-                    <div class="bg-light border-start border-5 border-success rounded-3 px-4 py-3">
-                        <h6 class="text-muted mb-1">Harga per Hari</h6>
-                        <h2 class="text-success fw-bold mb-0">
-                            Rp{{ number_format($gedung->harga_per_hari, 0, ',', '.') }}
-                        </h2>
-                    </div>
-                </div>
+               <div class="mb-4">
+    <div class="bg-light border-start border-5 border-success rounded-3 px-4 py-3 mb-3">
+        <h6 class="text-muted mb-1">Harga per Hari</h6>
+        <h2 class="text-success fw-bold mb-0">
+            Rp{{ number_format($gedung->harga_per_hari, 0, ',', '.') }}
+        </h2>
+    </div>
+    <div class="bg-light border-start border-5 border-info rounded-3 px-4 py-3">
+        <h6 class="text-muted mb-1">Harga per Jam</h6>
+        <h3 class="text-info fw-bold mb-0">
+            Rp{{ number_format($gedung->harga_per_jam, 0, ',', '.') }}
+        </h3>
+    </div>
+</div>
+
 
                 <h5 class="mt-4 fw-bold text-toska">Fasilitas</h5>
                 @php $f = $gedung->fasilitas ?? null; @endphp
@@ -141,6 +150,9 @@
                     @endif
                 </div>
 
+
+
+
                 <div class="d-flex gap-3">
                     <a href="#tgl_booking" class="btn btn-toska px-4 fw-semibold">
                         Booking Sekarang
@@ -185,46 +197,70 @@
 
     <div class="row row-cols-2 row-cols-sm-4 row-cols-md-6 g-2 text-center">
         @php
-            use Carbon\Carbon;
-            $bookedDates = [];
-            foreach ($semua_pemesanans as $p) {
-                if ($p->status === 'disetujui' && $p->pembayaran && $p->pembayaran->status_bayar === 'lunas') {
-                    $mulai = Carbon::parse($p->tanggal_mulai);
-                    $selesai = Carbon::parse($p->tanggal_selesai);
-                    while ($mulai <= $selesai) {
-                        $bookedDates[] = $mulai->toDateString();
-                        $mulai->addDay();
-                    }
-                }
-            }
-            $bulan = request('bulan', now()->month);
-            $tahun = request('tahun', now()->year);
-            $daysInMonth = Carbon::create($tahun, $bulan)->daysInMonth;
-        @endphp
+    use Carbon\Carbon;
+    $tanggalBertanda = [];
 
-        @for ($i = 1; $i <= $daysInMonth; $i++)
-            @php
-                $tanggal = Carbon::create($tahun, $bulan, $i);
-                $tglString = $tanggal->toDateString();
-                $booked = in_array($tglString, $bookedDates);
-                $isToday = $tanggal->isToday();
-            @endphp
-            <div class="col">
-                @if ($booked)
-                    <button class="btn btn-outline-secondary w-100" disabled><s>{{ $i }}</s></button>
-                @elseif ($isToday)
-                    <a href="{{ route('booking.form', ['gedung' => $gedung->id, 'tanggal' => $tglString]) }}"
-                       class="btn btn-info text-white w-100 fw-bold">
-                        {{ $i }}
-                    </a>
-                @else
-                    <a href="{{ route('booking.form', ['gedung' => $gedung->id, 'tanggal' => $tglString]) }}"
-                       class="btn btn-outline-success w-100">
-                        {{ $i }}
-                    </a>
-                @endif
-            </div>
-        @endfor
+    foreach ($semua_pemesanans as $p) {
+        if ($p->status === 'disetujui' && $p->pembayaran && $p->pembayaran->status_bayar === 'lunas') {
+            $mulai = Carbon::parse($p->tanggal_mulai);
+            $selesai = Carbon::parse($p->tanggal_selesai);
+            $status = ($p->durasi >= 24) ? 'seharian' : 'sebagian';
+
+            while ($mulai <= $selesai) {
+                $tglStr = $mulai->toDateString();
+                // Kalau sudah ada tanda 'seharian', jangan timpa dengan 'sebagian'
+                if (!isset($tanggalBertanda[$tglStr]) || $status === 'seharian') {
+                    $tanggalBertanda[$tglStr] = $status;
+                }
+                $mulai->addDay();
+            }
+        }
+    }
+
+    $bulan = request('bulan', now()->month);
+    $tahun = request('tahun', now()->year);
+    $daysInMonth = Carbon::create($tahun, $bulan)->daysInMonth;
+@endphp
+
+       @for ($i = 1; $i <= $daysInMonth; $i++)
+    @php
+        $tanggal = Carbon::create($tahun, $bulan, $i);
+        $tglString = $tanggal->toDateString();
+        $status = $tanggalBertanda[$tglString] ?? null;
+        $isToday = $tanggal->isToday();
+    @endphp
+    <div class="col">
+        @if ($status === 'seharian')
+            <button class="btn btn-outline-secondary w-100" disabled><s>{{ $i }}</s></button>
+       @elseif ($status === 'sebagian')
+    <a href="{{ route('booking.form', ['gedung' => $gedung->id, 'tanggal' => $tglString]) }}"
+       class="btn btn-warning text-dark w-100 fw-bold">
+        {{ $i }}
+    </a>
+
+        @elseif ($isToday)
+            <a href="{{ route('booking.form', ['gedung' => $gedung->id, 'tanggal' => $tglString]) }}"
+               class="btn btn-info text-white w-100 fw-bold">
+                {{ $i }}
+            </a>
+        @else
+            <a href="{{ route('booking.form', ['gedung' => $gedung->id, 'tanggal' => $tglString]) }}"
+               class="btn btn-outline-success w-100">
+                {{ $i }}
+            </a>
+        @endif
     </div>
+@endfor
+
+    </div>
+    <div class="mt-4">
+    <strong>Keterangan:</strong>
+    <ul class="small">
+        <li><s>Tanggal dicoret</s> = Booking seharian (24 jam)</li>
+        <li><span class="badge bg-warning text-dark">Kuning</span> = Booking sebagian hari</li>
+        <li><span class="badge bg-info text-dark">Biru</span> = Booking sebagian hari</li>
+    </ul>
+</div>
+
 </div>
 @endsection

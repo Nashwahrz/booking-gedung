@@ -13,6 +13,7 @@ class Gedung extends Model
         'deskripsi',
         'kapasitas',
         'harga_per_hari',
+        'harga_per_jam',
         'kategori_id',
         'foto',
     ];

@@ -101,6 +101,11 @@
                                 <label for="harga_per_hari" class="form-label">Harga per Hari</label>
                                 <input type="number" class="form-control" id="harga_per_hari" name="harga_per_hari" required>
                             </div>
+                            <div class="col-md-6">
+    <label for="harga_per_jam" class="form-label">Harga per Jam</label>
+    <input type="number" class="form-control" id="harga_per_jam" name="harga_per_jam" required>
+</div>
+
                         </div>
 
                         <div class="mb-3">

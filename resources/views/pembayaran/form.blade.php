@@ -7,7 +7,15 @@
     $start = Carbon::parse($pemesanan->tanggal_mulai);
     $end = Carbon::parse($pemesanan->tanggal_selesai);
     $days = $start->diffInDays($end) + 1;
-    $totalHarga = $pemesanan->gedung->harga_per_hari * $days;
+
+    if ($pemesanan->durasi >= 24) {
+        $totalHarga = $pemesanan->gedung->harga_per_hari * $days;
+        $lamaSewa = $days . ' hari';
+    } else {
+        $totalHarga = $pemesanan->gedung->harga_per_jam * $pemesanan->durasi;
+        $lamaSewa = $pemesanan->durasi . ' jam';
+    }
+
     $dp = $totalHarga * 0.10;
 @endphp
 
@@ -53,7 +61,14 @@
     <div class="info-card">
         <p class="mb-2"><strong>Gedung:</strong> {{ $pemesanan->gedung->nama }}</p>
         <p class="mb-2"><strong>Tanggal Sewa:</strong> {{ $pemesanan->tanggal_mulai }} s/d {{ $pemesanan->tanggal_selesai }}</p>
-        <p class="mb-2"><strong>Lama Sewa:</strong> {{ $days }} hari</p>
+        <p class="mb-2"><strong>Lama Sewa:</strong> {{ $lamaSewa }}</p>
+
+        @if ($pemesanan->durasi >= 24)
+            <p class="mb-2"><strong>Harga per Hari:</strong> Rp{{ number_format($pemesanan->gedung->harga_per_hari) }}</p>
+        @else
+            <p class="mb-2"><strong>Harga per Jam:</strong> Rp{{ number_format($pemesanan->gedung->harga_per_jam) }}</p>
+        @endif
+
         <p class="mb-2"><strong>Total Biaya Sewa:</strong> Rp{{ number_format($totalHarga, 0, ',', '.') }}</p>
         <p class="mb-0 fw-bold text-success">DP 10%: Rp{{ number_format($dp, 0, ',', '.') }}</p>
     </div>
@@ -62,8 +77,7 @@
     <form action="{{ route('pembayaran.store') }}" method="POST" enctype="multipart/form-data" class="bg-white p-4 shadow-sm rounded-4">
         @csrf
         <input type="hidden" name="pemesanan_id" value="{{ $pemesanan->id }}">
-       <input type="hidden" name="redirect_to_pelunasan" value="{{ request('from') === 'pelunasan' ? '1' : '0' }}">
-<!-- Ini untuk tahu asalnya dari pelunasan atau tidak -->
+        <input type="hidden" name="redirect_to_pelunasan" value="{{ request('from') === 'pelunasan' ? '1' : '0' }}">
 
         <div class="mb-3">
             <label for="tanggal_bayar" class="form-label">Tanggal Bayar</label>
