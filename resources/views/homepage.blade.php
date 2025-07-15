@@ -86,44 +86,47 @@
         </div>
 
         <div class="row">
-            @forelse ($gedungs as $gedung)
-                <div class="col-md-4 mb-4">
-                    <div class="card h-100 shadow-sm border-0 rounded-4 overflow-hidden">
-                        @if ($gedung->foto)
-                            <img src="{{ asset('storage/' . $gedung->foto) }}" class="card-img-top" alt="{{ $gedung->nama }}" style="height: 220px; object-fit: cover;">
-                        @else
-                            <img src="https://via.placeholder.com/400x220?text=No+Image" class="card-img-top" alt="No Image">
-                        @endif
+    @forelse ($gedungs as $gedung)
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100 shadow-sm border-0 rounded-4 overflow-hidden bg-white hover-card">
+                {{-- Gambar Gedung --}}
+                @if ($gedung->foto)
+                    <img src="{{ asset('storage/' . $gedung->foto) }}" class="card-img-top" alt="{{ $gedung->nama }}" style="height: 220px; object-fit: cover;">
+                @else
+                    <img src="https://via.placeholder.com/400x220?text=No+Image" class="card-img-top" alt="No Image">
+                @endif
 
-                        <div class="card-body">
-                            <h5 class="card-title text-theme fw-semibold">{{ $gedung->nama }}</h5>
-                            <p class="card-text text-muted mb-2">{{ Str::limit($gedung->deskripsi, 100) }}</p>
-                            <p class="mb-0 text-theme fw-bold">Rp{{ number_format($gedung->harga_per_hari, 0, ',', '.') }} / hari</p>
-                        </div>
+                {{-- Isi Kartu --}}
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title text-theme fw-semibold mb-2">{{ $gedung->nama }}</h5>
+                    <p class="card-text text-muted small mb-3">{{ Str::limit($gedung->deskripsi, 100) }}</p>
 
-                        <div class="card-footer bg-white border-0 d-flex justify-content-between p-3">
-                            {{-- <a href="{{ route('booking.form', ['gedung' => $gedung->id, 'tanggal' => now()->toDateString()]) }}"
-                               class="btn btn-theme text-white"> --}}
-                              <a href="{{ route('gedung.show', ['id' => $gedung->id]) }}#tgl_booking"
-   class="btn btn-theme text-white">
-   <i class="fas fa-calendar-check me-1"></i> Booking
-</a>
-
-
-                            <a href="{{ route('gedung.show', $gedung->id ?? 0) }}" class="btn btn-outline-theme btn-sm">
-                                <i class="fas fa-info-circle me-1"></i> Detail
-                            </a>
-                        </div>
+                    <div class="d-flex flex-column gap-1 mt-auto">
+                        <span class="badge bg-theme text-white fw-normal">Rp{{ number_format($gedung->harga_per_hari, 0, ',', '.') }}/hari</span>
+                        <span class="badge bg-light text-theme border border-theme">Rp{{ number_format($gedung->harga_per_jam, 0, ',', '.') }}/jam</span>
                     </div>
                 </div>
-            @empty
-                <div class="col-12 text-center py-5">
-                    <img src="{{ asset('img/no-data.svg') }}" alt="No data" class="img-fluid mb-4" style="max-height: 200px;">
-                    <h5 class="text-muted">Belum ada gedung yang tersedia.</h5>
-                    <p class="text-muted">Silakan hubungi admin jika Anda memerlukan bantuan.</p>
+
+                {{-- Tombol Aksi --}}
+                <div class="card-footer bg-white border-0 d-flex justify-content-between align-items-center p-3">
+                    <a href="{{ route('gedung.show', ['id' => $gedung->id]) }}#tgl_booking" class="btn btn-theme btn-sm rounded-pill px-3">
+                        <i class="fas fa-calendar-check me-1"></i> Booking
+                    </a>
+                    <a href="{{ route('gedung.show', $gedung->id ?? 0) }}" class="btn btn-outline-theme btn-sm rounded-pill px-3">
+                        <i class="fas fa-info-circle me-1"></i> Detail
+                    </a>
                 </div>
-            @endforelse
+            </div>
         </div>
+    @empty
+        <div class="col-12 text-center py-5">
+            <img src="{{ asset('img/no-data.svg') }}" alt="No data" class="img-fluid mb-4" style="max-height: 200px;">
+            <h5 class="text-muted">Belum ada gedung yang tersedia.</h5>
+            <p class="text-muted">Silakan hubungi admin jika Anda memerlukan bantuan.</p>
+        </div>
+    @endforelse
+</div>
+
     </div>
 </section>
 
@@ -137,9 +140,15 @@
         color: #2b7a78;
     }
 
+    .bg-theme {
+        background-color: #2b7a78 !important;
+    }
+
     .btn-theme {
         background-color: #2b7a78;
+        color: white;
         border: none;
+        transition: 0.3s ease;
     }
 
     .btn-theme:hover {
@@ -150,6 +159,7 @@
     .btn-outline-theme {
         border: 1px solid #2b7a78;
         color: #2b7a78;
+        transition: 0.3s ease;
     }
 
     .btn-outline-theme:hover {
@@ -160,23 +170,63 @@
     .card:hover {
         transform: translateY(-4px);
         transition: 0.3s ease;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .card-title {
+        font-size: 1.1rem;
+        color: #0f3d6e;
+        font-weight: 600;
+    }
+
+    .card-text {
+        font-size: 0.95rem;
+    }
+
+    .card-footer {
+        background-color: #f8f9fa;
+    }
+
+    .badge {
+        font-size: 0.85rem;
+        padding: 6px 12px;
+        border-radius: 20px;
+    }
+
+    .badge-theme {
+        background-color: #ccecee;
+        color: #0f3d6e;
+        font-weight: 500;
+    }
+
+    .border-theme {
+        border-color: #2b7a78 !important;
     }
 
     section {
         scroll-margin-top: 90px;
     }
+
     .input-group-text {
-    background-color: white;
-    border: none;
-}
+        background-color: white;
+        border: none;
+    }
 
-.input-group input:focus {
-    box-shadow: none;
-    outline: none;
-}
+    .input-group input:focus {
+        box-shadow: none;
+        outline: none;
+    }
 
+    .hover-card {
+        transition: all 0.3s ease-in-out;
+    }
+
+    .hover-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+    }
 </style>
+
 
 @include('contact')
 

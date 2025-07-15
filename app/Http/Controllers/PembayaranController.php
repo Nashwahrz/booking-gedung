@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Pembayaran;
 use App\Models\Pemesanan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\DpDisetujuiMail;
 
 class PembayaranController extends Controller
 {
@@ -65,7 +67,7 @@ class PembayaranController extends Controller
 
 
     return redirect()->route('pemesanan.cek', ['email' => $email])
-        ->with('success', 'Pembayaran berhasil dikirim!');
+        ->with('success', 'Pembayaran berhasil dikirim!, tunggu konfirmasi dari kami.');
 }
 
 

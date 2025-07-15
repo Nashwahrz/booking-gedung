@@ -1,6 +1,7 @@
 @extends('template')
 
 @section('content')
+
 @php
     use Illuminate\Support\Carbon;
 

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,7 +26,6 @@
         .navbar {
             background: linear-gradient(135deg, #2d7a8d, #1e2c3d);
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .navbar-brand {
@@ -68,19 +66,12 @@
             color: #ccecee !important;
         }
 
-        .btn-light {
-            background-color: #ffffff;
-            color: #2d7a8d;
-            border: none;
-            padding: 6px 15px;
-            border-radius: 6px;
-            transition: all 0.3s ease;
-        }
-
-        .btn-light:hover {
-            background-color: #2d7a8d;
-            color: #fff;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        .nav-link.active {
+            font-weight: bold;
+            color: #ccecee !important;
+            border-bottom: 2px solid #ccecee;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 5px;
         }
 
         .btn-outline-light {
@@ -122,30 +113,27 @@
         }
 
         @media (max-width: 576px) {
-    .navbar-brand img {
-        height: 32px;
-    }
+            .navbar-brand img {
+                height: 32px;
+            }
 
-    .navbar .nav-link {
-        padding: 6px 10px;
-        font-size: 14px;
-    }
+            .navbar .nav-link {
+                padding: 6px 10px;
+                font-size: 14px;
+            }
 
-    footer {
-        font-size: 12px;
-    }
-}
-
+            footer {
+                font-size: 12px;
+            }
+        }
     </style>
-
 </head>
-
 <body>
 
     {{-- NAVBAR --}}
-    <nav class="navbar navbar-expand-lg navbar-dark shadow-sm sticky-top">
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
         <div class="container">
-            <a class="navbar-brand">
+            <a class="navbar-brand" href="{{ url('/') }}">
                 <img src="{{ asset('img/logo.png') }}" alt="Logo"> Booking Gedung
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -153,64 +141,57 @@
             </button>
 
             <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
-                {{-- Kiri --}}
+                {{-- KIRI --}}
                 <ul class="navbar-nav">
                     @auth
-                         @if (in_array(auth()->user()->role, ['admin', 'superadmin']))
+                        @if (in_array(auth()->user()->role, ['admin', 'superadmin']))
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('admin.dashboard') }}">Dashboard Admin</a>
+                                <a class="nav-link {{ Request::routeIs('admin.dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}">
+                                    Dashboard Admin
+                                </a>
                             </li>
                         @else
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ url('/') }}">Home</a>
+                                <a class="nav-link {{ Request::is('/') ? 'active' : '' }}" href="{{ url('/') }}">Home</a>
                             </li>
-                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('pemesanan.form') }}">Cek Pemesanan</a>
+                            <li class="nav-item">
+                                <a class="nav-link {{ Request::routeIs('pemesanan.form') ? 'active' : '' }}" href="{{ route('pemesanan.form') }}">Cek Pemesanan</a>
                             </li>
                         @endif
 
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('gedung.index') }}">Data Gedung</a>
+                            <a class="nav-link {{ Request::routeIs('gedung.index') ? 'active' : '' }}" href="{{ route('gedung.index') }}">Data Gedung</a>
                         </li>
-
-                         @if (in_array(auth()->user()->role, ['admin', 'superadmin']))
-
-                        @endif
                     @endauth
 
                     @guest
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url('/') }}">Home</a>
+                            <a class="nav-link {{ Request::is('/') ? 'active' : '' }}" href="{{ url('/') }}">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('pemesanan.form') }}">Cek Pemesanan</a>
+                            <a class="nav-link {{ Request::routeIs('pemesanan.form') ? 'active' : '' }}" href="{{ route('pemesanan.form') }}">Cek Pemesanan</a>
                         </li>
                         <li class="nav-item">
-                           <a href="#contact" class="nav-link">Kontak</a>
+                            <a class="nav-link" href="#contact">Pengaduan</a>
                         </li>
                     @endguest
                 </ul>
 
-                {{-- Kanan --}}
+                {{-- KANAN --}}
                 @auth
-
-
-
-
                     <ul class="navbar-nav align-items-center">
                         <li class="nav-item me-2 text-white">
-    <i class="bi bi-person-circle me-1"></i> {{ auth()->user()->name }}
-</li>
-
+                            <i class="bi bi-person-circle me-1"></i> {{ auth()->user()->name }}
+                        </li>
                         <li class="nav-item me-2">
-                            <a class="nav-link btn px-3 py-1" href="{{ route('pemesanan.index') }}">
+                            <a class="nav-link {{ Request::routeIs('pemesanan.index') ? 'active' : '' }}" href="{{ route('pemesanan.index') }}">
                                 Kelola Pemesanan
                             </a>
                         </li>
                         <li class="nav-item">
                             <form action="{{ route('logout') }}" method="POST" onsubmit="return confirm('Yakin mau logout?')" class="d-inline">
                                 @csrf
-                                <button class="btn btn-outline-light px-3 py-1" type="submit">Logout</button>
+                                <button class="btn btn-outline-light" type="submit">Logout</button>
                             </form>
                         </li>
                     </ul>
@@ -223,7 +204,7 @@
     @yield('content')
 
     {{-- FOOTER --}}
-     <footer class="mt-5">
+    <footer class="mt-5">
         <div class="container text-center">
             <div class="mb-2">
                 <strong>Nashwa Harzathi</strong> &bull; Developer & UI Designer
@@ -231,10 +212,9 @@
             <div class="social-icons">
                 <a href="https://instagram.com/nsshw.z" target="_blank"><i class="fab fa-instagram"></i></a>
                 <a href="https://github.com/nashwahrz" target="_blank"><i class="fab fa-github"></i></a>
-               <a href="https://mail.google.com/mail/?view=cm&fs=1&to=nashwaharzathi05@gmail.com" target="_blank">
-    <i class="fas fa-envelope"></i>
-</a>
-
+                <a href="https://mail.google.com/mail/?view=cm&fs=1&to=nashwaharzathi05@gmail.com" target="_blank">
+                    <i class="fas fa-envelope"></i>
+                </a>
             </div>
             <div class="mt-2">
                 &copy; {{ date('Y') }} Booking Gedung App &mdash; All rights reserved.
@@ -244,6 +224,17 @@
 
     {{-- Bootstrap Bundle JS --}}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @if (session('success'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: '{{ session('success') }}',
+            confirmButtonColor: '#2d7a8d'
+        });
+    </script>
+@endif
 
+</body>
 </html>

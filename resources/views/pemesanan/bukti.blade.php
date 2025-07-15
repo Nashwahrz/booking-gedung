@@ -14,14 +14,14 @@
         line-height: 1.4;
     }
     .receipt-header {
-        border-bottom: 2px solid #007bff;
+        border-bottom: 2px solid #246b68;
         padding-bottom: 12px;
         margin-bottom: 20px;
     }
     .receipt-title {
         font-size: 16px;
         font-weight: 700;
-        color: #007bff;
+        color: #246b68;
     }
     .receipt-logo {
         height: 40px;
@@ -98,6 +98,14 @@
                     <td>: {{ $pemesanan->tanggal_mulai }} s/d {{ $pemesanan->tanggal_selesai }}</td>
                 </tr>
                 <tr>
+                    <th>Jam Pemakaian</th>
+                    <td>:
+                        {{ \Carbon\Carbon::parse($pemesanan->jam_mulai)->format('H:i') }} WIB
+                        s/d
+                        {{ \Carbon\Carbon::parse($pemesanan->jam_selesai)->format('H:i') }} WIB
+                    </td>
+                </tr>
+                <tr>
                     <th>Status Pemesanan</th>
                     <td>:
                         @if ($pemesanan->status === 'disetujui')
@@ -147,7 +155,6 @@
             <div class="text-end position-relative" style="min-height: 90px;">
                 <p class="mb-1">Petugas,</p>
                 <div class="position-relative d-inline-block mt-4">
-                    {{-- Gambar Stempel --}}
                     <img src="{{ asset('img/gedung.png') }}" alt="Stempel" class="stempel">
                     <p class="fw-semibold position-relative" style="z-index: 1;">Admin Booking</p>
                 </div>

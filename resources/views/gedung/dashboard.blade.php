@@ -189,6 +189,14 @@
         </div>
     </a>
 </div>
+<div class="col-sm-6 col-lg-4">
+    <a href="{{ route('bank.index') }}" class="text-decoration-none">
+        <div class="quick-action">
+            <i class="bi bi-bank2"></i>
+            <span>Kelola Bank</span>
+        </div>
+    </a>
+</div>
 
     </div>
 </div>

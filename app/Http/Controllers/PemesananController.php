@@ -9,7 +9,10 @@ use App\Models\Pemesanan;
 
 // use App\Mail\PemesananDisetujui;
 use Illuminate\Http\Request;
+
 use Illuminate\Support\Facades\Mail;
+use App\Mail\DpDisetujuiMail;
+
 
 class PemesananController extends Controller
 {
@@ -119,15 +122,20 @@ public function index()
 
 public function accept($id)
 {
-    $pemesanan = Pemesanan::findOrFail($id);
+    $pemesanan = Pemesanan::with('gedung')->findOrFail($id);
     $pemesanan->status = 'disetujui';
     $pemesanan->save();
 
     // Kirim email ke pemesan
-    // Mail::to($pemesanan->email)->send(new PemesananDisetujui($pemesanan));
+    try {
+        Mail::to($pemesanan->email)->send(new DpDisetujuiMail($pemesanan));
+    } catch (\Exception $e) {
+        return back()->with('error', 'Pemesanan disetujui tapi gagal kirim email: ' . $e->getMessage());
+    }
 
-    return back()->with('success', 'Pemesanan telah disetujui.');
+    return back()->with('success', 'Pemesanan telah disetujui dan email dikirim ke pemesan.');
 }
+
 public function reject($id)
 {
     $pemesanan = Pemesanan::findOrFail($id);

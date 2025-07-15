@@ -74,7 +74,7 @@ Route::get('/gedung/{id}', [PemesananController::class, 'show'])->name('gedung.s
 
 
 // Form Tambah Admin & Simpan: Khusus superadmin
-Route::middleware(['auth', CheckRole::class . ':admin'])->group(function () {
+Route::middleware(['auth', CheckRole::class . ':admin,superadmin'])->group(function () {
     Route::get('/admin/tambah-admin', [AuthController::class, 'formTambahAdmin'])->name('admin.formTambah');
     Route::post('/admin/tambah-admin', [AuthController::class, 'simpanAdminBaru'])->name('admin.simpanAdmin');
 });

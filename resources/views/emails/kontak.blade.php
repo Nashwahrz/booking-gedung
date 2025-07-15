@@ -45,6 +45,7 @@
         </div>
         <div class="email-footer">
             Email ini dikirim otomatis dari sistem Booking Gedung.
+            Silahkan Balas Pesan Email Di Atas
         </div>
     </div>
 </body>

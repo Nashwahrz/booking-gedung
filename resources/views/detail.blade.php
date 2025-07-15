@@ -258,7 +258,7 @@
     <ul class="small">
         <li><s>Tanggal dicoret</s> = Booking seharian (24 jam)</li>
         <li><span class="badge bg-warning text-dark">Kuning</span> = Booking sebagian hari</li>
-        <li><span class="badge bg-info text-dark">Biru</span> = Booking sebagian hari</li>
+        <li><span class="badge bg-info text-dark">Biru</span> = Hari ini</li>
     </ul>
 </div>
 
